@@ -4,7 +4,6 @@
 
 **Интеллектуальная платформа для анализа Open Source библиотек**
 
-[![Build Status](https://github.com/yourusername/stackscout/workflows/CI/badge.svg)]([https://github.com/yourusername/stackscout/](https://github.com/NeonByte-Education/StackScout/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/yourusername/stackscout)](https://codecov.io/gh/yourusername/stackscout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![NestJS](https://img.shields.io/badge/NestJS-v10.x-E0234E?logo=nestjs)](https://nestjs.com/)
