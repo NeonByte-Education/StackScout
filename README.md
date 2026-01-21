@@ -9,7 +9,8 @@
 [![NestJS](https://img.shields.io/badge/NestJS-v10.x-E0234E?logo=nestjs)](https://nestjs.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-[Возможности](#-возможности) • [Архитектура](#-архитектура) • [Быстрый старт](#-быстрый-старт) • [API Документация](#-api-документация) • [Roadmap](#-roadmap)
+[Возможности](#возможности) • [Архитектура](#архитектура) • [Быстрый старт](#быстрый-старт) • [API Документация](#api-документация) • [Roadmap](#roadmap)
+
 
 </div>
 
