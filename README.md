@@ -344,10 +344,10 @@ Content-Type: application/json
 **StackScout Team**  
 Проект по Advanced Backend & DevOps
 
-📧 Контакты
-🔗 GitHub: 
-https://github.com/S-NOWNUM-B
-https://github.com/LINESKL
+**Контакты:**
+- Email: contact@stackscout.dev
+- GitHub: [@S-NOWNUM-B](https://github.com/S-NOWNUM-B)
+- GitHub: [@LINESKL](https://github.com/LINESKL)
 
 ---
 
