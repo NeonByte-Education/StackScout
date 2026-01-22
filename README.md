@@ -4,13 +4,13 @@
 
 **Интеллектуальная платформа для анализа Open Source библиотек**
 
+[![Build Status](https://github.com/yourusername/stackscout/workflows/CI/badge.svg)](https://github.com/yourusername/stackscout/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/yourusername/stackscout)](https://codecov.io/gh/yourusername/stackscout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![NestJS](https://img.shields.io/badge/NestJS-v10.x-E0234E?logo=nestjs)](https://nestjs.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17-007396?logo=openjdk)](https://openjdk.org/)
 
 [Возможности](#возможности) • [Архитектура](#архитектура) • [Быстрый старт](#быстрый-старт) • [API Документация](#api-документация) • [Roadmap](#roadmap)
-
 
 </div>
 
@@ -29,7 +29,7 @@
 
 ### Решение: StackScout
 
-**StackScout** — это интеллектуальный микросервис для **управления программными активами (Software Asset Management)**, который автоматизирует сбор, анализ и мониторинг open-source библиотек из PyPI и Docker Hub.
+**StackScout** — это интеллектуальный микросервис на **Java Spring Boot** для **управления программными активами (Software Asset Management)**, который автоматизирует сбор, анализ и мониторинг open-source библиотек из PyPI и Docker Hub.
 
 Наша платформа предоставляет:
 - Оценку "здоровья" библиотек в реальном времени
@@ -64,10 +64,10 @@
 
 | Компонент | Технология | Назначение |
 |-----------|-----------|-----------|
-| **API слой** | NestJS + Express | RESTful endpoints с JWT авторизацией |
-| **Слой данных** | PostgreSQL + Prisma/TypeORM | Постоянное хранилище и ORM |
-| **Слой кэширования** | Redis | Управление сессиями и ограничение запросов |
-| **Система очередей** | BullMQ | Асинхронный парсинг и планирование |
+| **API слой** | Spring Boot + Spring Web | RESTful endpoints с JWT авторизацией |
+| **Слой данных** | PostgreSQL + Spring Data JPA | Постоянное хранилище и ORM |
+| **Слой кэширования** | Redis + Spring Cache | Управление сессиями и ограничение запросов |
+| **Система очередей** | Spring AMQP + RabbitMQ | Асинхронный парсинг и планирование |
 | **Мониторинг** | Prometheus + Grafana | Сбор метрик и визуализация |
 
 ---
@@ -102,17 +102,17 @@
 - **0-39**: Плохо (Избегать или заменить)
 
 ### Защищенный API
-- JWT-авторизация
+- JWT-авторизация (Spring Security)
 - Управление доступом на основе ролей (RBAC)
 - Ограничение количества запросов (100 запросов/мин на API ключ)
-- Валидация входных данных с class-validator
-- Спецификация OpenAPI 3.0
+- Валидация входных данных с Bean Validation
+- Спецификация OpenAPI 3.0 (SpringDoc)
 
 ### Наблюдаемость (Observability)
 - Пользовательские метрики Prometheus (`http_requests_total`, `library_scan_duration`)
 - Готовые дашборды Grafana
-- Endpoints для проверки здоровья (`/health`, `/metrics`)
-- Структурированное логирование с Winston
+- Spring Boot Actuator для проверки здоровья (`/actuator/health`, `/actuator/prometheus`)
+- Структурированное логирование с Logback
 
 ---
 
@@ -120,7 +120,8 @@
 
 ### Требования
 
-- **Node.js** >= 18.x
+- **Java** 17 или выше
+- **Maven** 3.8+ или **Gradle** 8.x
 - **Docker** & Docker Compose
 - **Git**
 
@@ -134,28 +135,35 @@
 
 2. **Настройте переменные окружения**
    ```bash
-   cp .env.example .env
+   cp application.yml.example src/main/resources/application.yml
    ```
 
-   Отредактируйте `.env` файл:
-   ```env
-   # База данных
-   DATABASE_URL="postgresql://postgres:password@localhost:5432/stackscout"
+   Отредактируйте `application.yml` файл:
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:postgresql://localhost:5432/stackscout
+       username: postgres
+       password: password
+     
+     redis:
+       host: localhost
+       port: 6379
+     
+     security:
+       jwt:
+         secret: your-super-secret-key
+         expiration: 604800000  # 7 дней в миллисекундах
    
-   # Redis
-   REDIS_HOST=localhost
-   REDIS_PORT=6379
+   api:
+     pypi:
+       url: https://pypi.org/pypi
+     dockerhub:
+       url: https://hub.docker.com/v2
    
-   # JWT
-   JWT_SECRET=your-super-secret-key
-   JWT_EXPIRATION=7d
-   
-   # API ключи
-   PYPI_API_URL=https://pypi.org/pypi
-   DOCKERHUB_API_URL=https://hub.docker.com/v2
-   
-   # Расписание Cron
-   COLLECTOR_CRON="0 */6 * * *"  # Каждые 6 часов
+   scheduler:
+     collector:
+       cron: "0 0 */6 * * *"  # Каждые 6 часов
    ```
 
 3. **Запустите сервисы через Docker Compose**
@@ -164,7 +172,7 @@
    ```
 
    Это запустит:
-   - API сервер (Порт 3000)
+   - API сервер (Порт 8080)
    - PostgreSQL (Порт 5432)
    - Redis (Порт 6379)
    - Prometheus (Порт 9090)
@@ -172,29 +180,34 @@
 
 4. **Выполните миграции базы данных**
    ```bash
-   npm run prisma:migrate
-   # или
-   npm run typeorm:migrate
+   # Flyway миграции запустятся автоматически при старте приложения
+   # Или вручную через Maven
+   mvn flyway:migrate
    ```
 
 5. **Получите доступ к приложению**
-   - API: http://localhost:3000
-   - Swagger документация: http://localhost:3000/api/docs
+   - API: http://localhost:8080
+   - Swagger документация: http://localhost:8080/swagger-ui.html
+   - Actuator: http://localhost:8080/actuator
    - Grafana: http://localhost:3001 (admin/admin)
 
 ### Режим разработки
 
 ```bash
-# Установка зависимостей
-npm install
+# Сборка проекта
+mvn clean install
+# или с Gradle
+./gradlew build
 
-# Запуск в режиме отслеживания изменений
-npm run start:dev
+# Запуск в режиме разработки
+mvn spring-boot:run
+# или с Gradle
+./gradlew bootRun
 
 # Запуск тестов
-npm run test
-npm run test:e2e
-npm run test:cov
+mvn test
+# или с Gradle
+./gradlew test
 ```
 
 ---
@@ -203,7 +216,7 @@ npm run test:cov
 
 Интерактивная документация API доступна через **Swagger UI**:
 
-**http://localhost:3000/api/docs**
+**http://localhost:8080/swagger-ui.html**
 
 ### Примеры endpoints
 
@@ -250,9 +263,9 @@ Content-Type: application/json
 ## Roadmap
 
 ### Неделя 1-3: Фундамент
-- [ ] Настройка проекта с NestJS
-- [ ] Конфигурация Docker окружения
-- [ ] Проектирование схемы БД (Prisma/TypeORM)
+- [x] Настройка проекта с Spring Boot
+- [x] Конфигурация Docker окружения
+- [x] Проектирование схемы БД (Spring Data JPA)
 - [ ] Базовые CRUD операции
 
 ### Неделя 4-6: Основные функции
@@ -262,10 +275,10 @@ Content-Type: application/json
 - [ ] Калькулятор оценки здоровья
 
 ### Неделя 7-9: Продвинутые функции
-- [ ] Система JWT-авторизации
-- [ ] Настройка очереди задач BullMQ
-- [ ] Планировщик сборщика на Cron
-- [ ] Слой кэширования Redis
+- [ ] Система JWT-авторизации (Spring Security)
+- [ ] Настройка очереди задач RabbitMQ
+- [ ] Планировщик сборщика (@Scheduled)
+- [ ] Слой кэширования Redis (Spring Cache)
 
 ### Неделя 10-12: Качество & DevOps
 - [ ] Unit & E2E тестирование (Jest)
@@ -290,17 +303,19 @@ Content-Type: application/json
 <td>
 
 **Backend**
-- TypeScript
-- Node.js
-- NestJS
+- Java 17
+- Spring Boot 3.2
+- Spring Security
+- Spring Data JPA
 
 </td>
 <td>
 
 **База данных**
 - PostgreSQL
-- Prisma ORM / TypeORM
+- Flyway Migrations
 - Redis
+- RabbitMQ
 
 </td>
 <td>
@@ -309,6 +324,7 @@ Content-Type: application/json
 - Docker
 - GitHub Actions
 - Prometheus + Grafana
+- Maven / Gradle
 
 </td>
 </tr>
@@ -345,6 +361,7 @@ Content-Type: application/json
 Проект по Advanced Backend & DevOps
 
 **Контакты:**
+- Email: contact@stackscout.dev
 - GitHub: [@S-NOWNUM-B](https://github.com/S-NOWNUM-B)
 - GitHub: [@LINESKL](https://github.com/LINESKL)
 
@@ -354,6 +371,6 @@ Content-Type: application/json
 
 **Поставьте звезду этому репозиторию, если он вам помог!**
 
-Сделано с любовью и TypeScript
+Сделано с любовью и Java
 
 </div>
