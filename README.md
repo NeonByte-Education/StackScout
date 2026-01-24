@@ -4,10 +4,11 @@
 
 **Интеллектуальная платформа для анализа Open Source библиотек**
 
+[![Build Status](https://github.com/yourusername/stackscout/workflows/CI/badge.svg)](https://github.com/yourusername/stackscout/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/yourusername/stackscout)](https://codecov.io/gh/yourusername/stackscout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-17-007396?logo=openjdk)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-21-007396?logo=openjdk)](https://openjdk.org/)
 
 [Возможности](#возможности) • [Архитектура](#архитектура) • [Быстрый старт](#быстрый-старт) • [API Документация](#api-документация) • [Roadmap](#roadmap)
 
@@ -119,12 +120,12 @@
 
 ### Требования
 
-- **Java** 17 или выше
-- **Maven** 3.8+ или **Gradle** 8.x
-- **Docker** & Docker Compose
+- **Java** 21 или выше
 - **Git**
 
-### Установка
+### Установка и запуск (без Docker)
+
+Проект настроен для работы "из коробки" без дополнительных настроек!
 
 1. **Клонируйте репозиторий**
    ```bash
@@ -132,81 +133,87 @@
    cd StackScout
    ```
 
-2. **Настройте переменные окружения**
+2. **Запустите приложение**
    ```bash
-   cp application.yml.example src/main/resources/application.yml
+   ./gradlew bootRun
    ```
-
-   Отредактируйте `application.yml` файл:
-   ```yaml
-   spring:
-     datasource:
-       url: jdbc:postgresql://localhost:5432/stackscout
-       username: postgres
-       password: password
-     
-     redis:
-       host: localhost
-       port: 6379
-     
-     security:
-       jwt:
-         secret: your-super-secret-key
-         expiration: 604800000  # 7 дней в миллисекундах
    
-   api:
-     pypi:
-       url: https://pypi.org/pypi
-     dockerhub:
-       url: https://hub.docker.com/v2
-   
-   scheduler:
-     collector:
-       cron: "0 0 */6 * * *"  # Каждые 6 часов
-   ```
+   Приложение автоматически:
+   - Использует встроенную H2 базу данных в памяти
+   - Запустится на порту 8081
+   - Отключит Redis и RabbitMQ
+   - Настроит H2 консоль для просмотра данных
 
-3. **Запустите сервисы через Docker Compose**
+3. **Получите доступ к приложению**
+   - API: http://localhost:8081
+   - H2 Console: http://localhost:8081/h2-console
+     - JDBC URL: `jdbc:h2:mem:stackscout`
+     - Username: `sa`
+     - Password: (оставить пустым)
+   - Swagger документация: http://localhost:8081/swagger-ui.html
+   - Actuator: http://localhost:8081/actuator
+
+### Запуск с Docker (Production режим)
+
+Для полноценного окружения с PostgreSQL, Redis и RabbitMQ:
+
+1. **Запустите сервисы через Docker Compose**
    ```bash
    docker-compose up -d
    ```
 
-   Это запустит:
-   - API сервер (Порт 8080)
-   - PostgreSQL (Порт 5432)
-   - Redis (Порт 6379)
-   - Prometheus (Порт 9090)
-   - Grafana (Порт 3001)
-
-4. **Выполните миграции базы данных**
+2. **Запустите приложение с production профилем**
    ```bash
-   # Flyway миграции запустятся автоматически при старте приложения
-   # Или вручную через Maven
-   mvn flyway:migrate
+   ./gradlew bootRun --args='--spring.profiles.active=prod'
    ```
 
-5. **Получите доступ к приложению**
-   - API: http://localhost:8080
-   - Swagger документация: http://localhost:8080/swagger-ui.html
-   - Actuator: http://localhost:8080/actuator
-   - Grafana: http://localhost:3001 (admin/admin)
+   Или без профиля (по умолчанию использует PostgreSQL):
+   ```bash
+   ./gradlew bootRun
+   ```
+
+### Режимы работы
+
+#### Dev режим (по умолчанию)
+- H2 база данных в памяти
+- Без Redis и RabbitMQ
+- H2 Console включена
+- SQL логирование включено
+- Автоматическое создание схемы БД
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+#### Production режим
+- PostgreSQL база данных
+- Redis для кэширования
+- RabbitMQ для очередей
+- Flyway миграции
+- Полный мониторинг
+
+```bash
+docker-compose up -d
+./gradlew bootRun
+```
 
 ### Режим разработки
 
 ```bash
 # Сборка проекта
-mvn clean install
-# или с Gradle
 ./gradlew build
 
-# Запуск в режиме разработки
-mvn spring-boot:run
-# или с Gradle
+# Запуск в режиме разработки с автоперезагрузкой
 ./gradlew bootRun
 
 # Запуск тестов
-mvn test
-# или с Gradle
 ./gradlew test
+
+# Очистка и полная пересборка
+./gradlew clean build
+
+# Запуск с профилем
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
 ---
@@ -323,7 +330,7 @@ Content-Type: application/json
 - Docker
 - GitHub Actions
 - Prometheus + Grafana
-- Maven / Gradle
+- Gradle (Kotlin DSL)
 
 </td>
 </tr>
