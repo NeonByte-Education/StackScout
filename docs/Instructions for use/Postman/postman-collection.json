@@ -1,0 +1,236 @@
+{
+  "info": {
+    "name": "StackScout API",
+    "description": "API для анализа Open Source библиотек",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/ping",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "ping"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Libraries",
+      "item": [
+        {
+          "name": "Get All Libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Library by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/search?query=react&source=npm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "react"
+                },
+                {
+                  "key": "source",
+                  "value": "npm"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Library Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Library",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"express\",\n  \"version\": \"4.18.2\",\n  \"source\": \"npm\",\n  \"license\": \"MIT\",\n  \"healthScore\": 97,\n  \"lastRelease\": \"2023-10-09\",\n  \"repository\": \"https://github.com/expressjs/express\",\n  \"description\": \"Fast, unopinionated, minimalist web framework\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Library",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version\": \"4.19.0\",\n  \"healthScore\": 98,\n  \"lastRelease\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Library",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "4"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Collector",
+      "item": [
+        {
+          "name": "Start Scan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"pypi\",\n  \"packages\": [\"requests\", \"django\", \"flask\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/scan",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "scan"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Collector Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
