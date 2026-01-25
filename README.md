@@ -4,7 +4,6 @@
 
 **Интеллектуальная платформа для анализа Open Source библиотек**
 
-[![Build Status](https://github.com/yourusername/stackscout/workflows/CI/badge.svg)](https://github.com/yourusername/stackscout/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/yourusername/stackscout)](https://codecov.io/gh/yourusername/stackscout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
