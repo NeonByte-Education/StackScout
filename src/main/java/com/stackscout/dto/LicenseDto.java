@@ -1,5 +1,6 @@
 package com.stackscout.dto;
 
+import com.stackscout.model.License;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,22 +8,20 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * DTO для ответа с информацией о библиотеке
+ * DTO для ответа с информацией о лицензии
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LibraryDto {
+public class LicenseDto {
     
     private Long id;
     private String name;
-    private String version;
-    private String source;
-    private String license;
-    private Integer healthScore;
-    private String lastRelease;
-    private String repository;
+    private License.LicenseType licenseType;
     private String description;
+    private Boolean isOsiApproved;
+    private Boolean commercialUseAllowed;
+    private String url;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
