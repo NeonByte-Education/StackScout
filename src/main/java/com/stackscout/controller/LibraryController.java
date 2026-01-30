@@ -1,155 +1,150 @@
 package com.stackscout.controller;
 
-import com.stackscout.dto.ErrorResponse;
-import com.stackscout.model.Library;
+import com.stackscout.dto.CreateLibraryRequest;
+import com.stackscout.dto.LibraryDto;
+import com.stackscout.dto.UpdateLibraryRequest;
+import com.stackscout.service.LibraryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST контроллер для управления библиотеками
+ */
 @RestController
 @RequestMapping("/api/v1/libraries")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
+@Tag(name = "Libraries", description = "API для управления библиотеками")
 public class LibraryController {
 
-    private final List<Library> libraries = new ArrayList<>();
-    private Long nextId = 1L;
+    private final LibraryService libraryService;
 
-    public LibraryController() {
-        libraries.add(new Library(
-            nextId++, "requests", "2.31.0", "pypi", 
-            "Apache-2.0", 95, "2023-05-22",
-            "https://github.com/psf/requests",
-            "HTTP библиотека для Python"
-        ));
-        
-        libraries.add(new Library(
-            nextId++, "django", "5.0.0", "pypi",
-            "BSD-3-Clause", 98, "2023-12-04",
-            "https://github.com/django/django",
-            "Веб-фреймворк для Python"
-        ));
-        
-        libraries.add(new Library(
-            nextId++, "react", "18.2.0", "npm",
-            "MIT", 99, "2023-06-14",
-            "https://github.com/facebook/react",
-            "JavaScript библиотека для UI"
-        ));
-    }
-
+    @Operation(summary = "Получить все библиотеки", description = "Возвращает список всех библиотек с пагинацией")
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllLibraries(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortDirection
     ) {
-        int start = Math.min(page * size, libraries.size());
-        int end = Math.min(start + size, libraries.size());
-        List<Library> paginatedLibraries = libraries.subList(start, end);
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        
+        Page<LibraryDto> librariesPage = libraryService.getAllLibraries(pageable);
         
         Map<String, Object> response = new HashMap<>();
-        response.put("libraries", paginatedLibraries);
-        response.put("totalElements", libraries.size());
-        response.put("currentPage", page);
-        response.put("pageSize", size);
-        response.put("totalPages", (int) Math.ceil((double) libraries.size() / size));
+        response.put("libraries", librariesPage.getContent());
+        response.put("totalElements", librariesPage.getTotalElements());
+        response.put("currentPage", librariesPage.getNumber());
+        response.put("pageSize", librariesPage.getSize());
+        response.put("totalPages", librariesPage.getTotalPages());
         
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Получить библиотеку по ID", description = "Возвращает детали конкретной библиотеки")
     @GetMapping("/{id}")
-    public ResponseEntity<Library> getLibraryById(@PathVariable Long id) {
-        return libraries.stream()
-            .filter(lib -> lib.getId().equals(id))
-            .findFirst()
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<LibraryDto> getLibraryById(@PathVariable Long id) {
+        LibraryDto library = libraryService.getLibraryById(id);
+        return ResponseEntity.ok(library);
     }
 
+    @Operation(summary = "Поиск библиотек", description = "Поиск библиотек по названию и/или источнику")
     @GetMapping("/search")
-    public ResponseEntity<List<Library>> searchLibraries(
+    public ResponseEntity<Map<String, Object>> searchLibraries(
         @RequestParam(required = false) String query,
-        @RequestParam(required = false) String source
+        @RequestParam(required = false) String source,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
     ) {
-        List<Library> result = libraries.stream()
-            .filter(lib -> {
-                boolean matchQuery = query == null ||
-                    lib.getName().toLowerCase().contains(query.toLowerCase());
-                boolean matchSource = source == null ||
-                    lib.getSource().equalsIgnoreCase(source);
-                return matchQuery && matchSource;
-            })
-            .toList();
-        return ResponseEntity.ok(result);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createLibrary(@RequestBody Library library) {
-        try {
-            if (library.getName() == null || library.getName().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("Имя библиотеки обязательно", LocalDateTime.now()));
-            }
-            
-            library.setId(nextId++);
-            libraries.add(library);
-            
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Библиотека успешно создана");
-            response.put("library", library);
-            
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse("Ошибка при создании библиотеки: " + e.getMessage(), LocalDateTime.now()));
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateLibrary(@PathVariable Long id, @RequestBody Library updatedLibrary) {
-        return libraries.stream()
-            .filter(lib -> lib.getId().equals(id))
-            .findFirst()
-            .<ResponseEntity<?>>map(library -> {
-                if (updatedLibrary.getName() != null) library.setName(updatedLibrary.getName());
-                if (updatedLibrary.getVersion() != null) library.setVersion(updatedLibrary.getVersion());
-                if (updatedLibrary.getSource() != null) library.setSource(updatedLibrary.getSource());
-                if (updatedLibrary.getLicense() != null) library.setLicense(updatedLibrary.getLicense());
-                if (updatedLibrary.getHealthScore() != null) library.setHealthScore(updatedLibrary.getHealthScore());
-                if (updatedLibrary.getLastRelease() != null) library.setLastRelease(updatedLibrary.getLastRelease());
-                if (updatedLibrary.getRepository() != null) library.setRepository(updatedLibrary.getRepository());
-                if (updatedLibrary.getDescription() != null) library.setDescription(updatedLibrary.getDescription());
-                
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Библиотека успешно обновлена");
-                response.put("library", library);
-                return ResponseEntity.ok(response);
-            })
-            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse("Библиотека с ID " + id + " не найдена", LocalDateTime.now())));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLibrary(@PathVariable Long id) {
-        boolean removed = libraries.removeIf(lib -> lib.getId().equals(id));
-        if (removed) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Библиотека успешно удалена");
-            response.put("id", id.toString());
-            return ResponseEntity.ok(response);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<LibraryDto> result;
+        
+        if (query != null && !query.trim().isEmpty() && source != null && !source.trim().isEmpty()) {
+            result = libraryService.searchLibrariesBySource(query, source, pageable);
+        } else if (query != null && !query.trim().isEmpty()) {
+            result = libraryService.searchLibraries(query, pageable);
+        } else if (source != null && !source.trim().isEmpty()) {
+            result = libraryService.getLibrariesBySource(source, pageable);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse("Библиотека с ID " + id + " не найдена", LocalDateTime.now()));
+            result = libraryService.getAllLibraries(pageable);
         }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("libraries", result.getContent());
+        response.put("totalElements", result.getTotalElements());
+        response.put("currentPage", result.getNumber());
+        response.put("totalPages", result.getTotalPages());
+        
+        return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Создать новую библиотеку", description = "Добавляет новую библиотеку в систему")
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> createLibrary(@Valid @RequestBody CreateLibraryRequest request) {
+        LibraryDto createdLibrary = libraryService.createLibrary(request);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Библиотека успешно создана");
+        response.put("library", createdLibrary);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "Обновить библиотеку", description = "Обновляет существующую библиотеку")
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> updateLibrary(
+            @PathVariable Long id, 
+            @Valid @RequestBody UpdateLibraryRequest request) {
+        
+        LibraryDto updatedLibrary = libraryService.updateLibrary(id, request);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Библиотека успешно обновлена");
+        response.put("library", updatedLibrary);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Удалить библиотеку", description = "Удаляет библиотеку из системы")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteLibrary(@PathVariable Long id) {
+        libraryService.deleteLibrary(id);
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Библиотека успешно удалена");
+        response.put("id", id.toString());
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Получить здоровые библиотеки", description = "Возвращает библиотеки с оценкой здоровья выше заданного порога")
+    @GetMapping("/healthy")
+    public ResponseEntity<List<LibraryDto>> getHealthyLibraries(
+            @RequestParam(defaultValue = "80") Integer minScore) {
+        List<LibraryDto> healthyLibraries = libraryService.getHealthyLibraries(minScore);
+        return ResponseEntity.ok(healthyLibraries);
+    }
+
+    @Operation(summary = "Статистика библиотек", description = "Возвращает общую статистику по библиотекам")
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStats() {
+        Page<LibraryDto> allLibraries = libraryService.getAllLibraries(Pageable.unpaged());
+        List<LibraryDto> libraries = allLibraries.getContent();
+        
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalLibraries", libraries.size());
         stats.put("sources", Map.of(
@@ -159,10 +154,12 @@ public class LibraryController {
         ));
         stats.put("averageHealthScore", 
             libraries.stream()
-                .mapToInt(l -> l.getHealthScore() != null ? l.getHealthScore() : 0)
+                .filter(l -> l.getHealthScore() != null)
+                .mapToInt(LibraryDto::getHealthScore)
                 .average()
                 .orElse(0.0)
         );
+        
         return ResponseEntity.ok(stats);
     }
 }
