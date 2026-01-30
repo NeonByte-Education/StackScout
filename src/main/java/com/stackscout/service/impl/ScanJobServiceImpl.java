@@ -34,6 +34,9 @@ public class ScanJobServiceImpl implements ScanJobService {
     @Override
     public Page<ScanJobDto> getAllScanJobs(Pageable pageable) {
         log.debug("Получение всех задач сканирования с пагинацией: {}", pageable);
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable не может быть null");
+        }
         return scanJobRepository.findAll(pageable)
                 .map(this::toDto);
     }
@@ -41,6 +44,9 @@ public class ScanJobServiceImpl implements ScanJobService {
     @Override
     public ScanJobDto getScanJobById(Long id) {
         log.debug("Поиск задачи сканирования с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         ScanJob scanJob = scanJobRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задача сканирования не найдена с ID: " + id));
         return toDto(scanJob);
@@ -68,6 +74,9 @@ public class ScanJobServiceImpl implements ScanJobService {
     @Transactional
     public ScanJobDto updateScanJobStatus(Long id, ScanJob.ScanStatus status) {
         log.info("Обновление статуса задачи {} на {}", id, status);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         ScanJob scanJob = scanJobRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Задача сканирования не найдена с ID: " + id));
@@ -92,6 +101,9 @@ public class ScanJobServiceImpl implements ScanJobService {
     @Transactional
     public void deleteScanJob(Long id) {
         log.info("Удаление задачи сканирования с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         if (!scanJobRepository.existsById(id)) {
             throw new ResourceNotFoundException("Задача сканирования не найдена с ID: " + id);

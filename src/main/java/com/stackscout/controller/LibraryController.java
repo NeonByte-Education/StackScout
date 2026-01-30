@@ -40,8 +40,9 @@ public class LibraryController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortDirection
     ) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        String direction = sortDirection != null ? sortDirection : "ASC";
+        Sort.Direction sortDirEnum = Sort.Direction.fromString(direction);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirEnum, sortBy));
         
         Page<LibraryDto> librariesPage = libraryService.getAllLibraries(pageable);
         

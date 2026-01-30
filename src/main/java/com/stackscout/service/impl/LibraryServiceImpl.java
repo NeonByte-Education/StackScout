@@ -33,6 +33,9 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public Page<LibraryDto> getAllLibraries(Pageable pageable) {
         log.debug("Получение всех библиотек с пагинацией: {}", pageable);
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable не может быть null");
+        }
         return libraryRepository.findAll(pageable)
                 .map(libraryMapper::toDto);
     }
@@ -40,6 +43,9 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public LibraryDto getLibraryById(Long id) {
         log.debug("Поиск библиотеки с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         Library library = libraryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Библиотека не найдена с ID: " + id));
         return libraryMapper.toDto(library);
@@ -51,6 +57,9 @@ public class LibraryServiceImpl implements LibraryService {
         log.info("Создание новой библиотеки: {}", request.getName());
         
         Library library = libraryMapper.toEntity(request);
+        if (library == null) {
+            throw new IllegalArgumentException("Library не может быть null");
+        }
         Library savedLibrary = libraryRepository.save(library);
         
         log.info("Библиотека успешно создана с ID: {}", savedLibrary.getId());
@@ -61,11 +70,15 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     public LibraryDto updateLibrary(Long id, UpdateLibraryRequest request) {
         log.info("Обновление библиотеки с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         Library library = libraryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Библиотека не найдена с ID: " + id));
         
         libraryMapper.updateEntityFromDto(library, request);
+        @SuppressWarnings("null")
         Library updatedLibrary = libraryRepository.save(library);
         
         log.info("Библиотека успешно обновлена: {}", id);
@@ -76,6 +89,9 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     public void deleteLibrary(Long id) {
         log.info("Удаление библиотеки с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         if (!libraryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Библиотека не найдена с ID: " + id);

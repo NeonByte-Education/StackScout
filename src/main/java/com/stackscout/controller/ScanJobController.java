@@ -40,8 +40,9 @@ public class ScanJobController {
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDirection
     ) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        String direction = sortDirection != null ? sortDirection : "DESC";
+        Sort.Direction sortDirEnum = Sort.Direction.fromString(direction);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirEnum, sortBy));
         
         Page<ScanJobDto> jobsPage = scanJobService.getAllScanJobs(pageable);
         

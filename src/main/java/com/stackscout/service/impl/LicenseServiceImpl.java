@@ -30,6 +30,9 @@ public class LicenseServiceImpl implements LicenseService {
     @Override
     public Page<LicenseDto> getAllLicenses(Pageable pageable) {
         log.debug("Получение всех лицензий с пагинацией: {}", pageable);
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable не может быть null");
+        }
         return licenseRepository.findAll(pageable)
                 .map(this::toDto);
     }
@@ -37,6 +40,9 @@ public class LicenseServiceImpl implements LicenseService {
     @Override
     public LicenseDto getLicenseById(Long id) {
         log.debug("Поиск лицензии с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         License license = licenseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Лицензия не найдена с ID: " + id));
         return toDto(license);
@@ -48,6 +54,9 @@ public class LicenseServiceImpl implements LicenseService {
         log.info("Создание новой лицензии: {}", request.getName());
         
         License license = toEntity(request);
+        if (license == null) {
+            throw new IllegalArgumentException("License не может быть null");
+        }
         License savedLicense = licenseRepository.save(license);
         
         log.info("Лицензия успешно создана с ID: {}", savedLicense.getId());
@@ -58,11 +67,15 @@ public class LicenseServiceImpl implements LicenseService {
     @Transactional
     public LicenseDto updateLicense(Long id, CreateLicenseRequest request) {
         log.info("Обновление лицензии с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         License license = licenseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Лицензия не найдена с ID: " + id));
         
         updateEntityFromDto(license, request);
+        @SuppressWarnings("null")
         License updatedLicense = licenseRepository.save(license);
         
         log.info("Лицензия успешно обновлена: {}", id);
@@ -73,6 +86,9 @@ public class LicenseServiceImpl implements LicenseService {
     @Transactional
     public void deleteLicense(Long id) {
         log.info("Удаление лицензии с ID: {}", id);
+        if (id == null) {
+            throw new IllegalArgumentException("ID не может быть null");
+        }
         
         if (!licenseRepository.existsById(id)) {
             throw new ResourceNotFoundException("Лицензия не найдена с ID: " + id);
