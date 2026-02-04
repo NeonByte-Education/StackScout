@@ -1,3 +1,4 @@
+// File: LicenseServiceImpl.java
 package com.stackscout.service.impl;
 
 import com.stackscout.dto.CreateLicenseRequest;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LicenseServiceImpl implements LicenseService {
-    
+
     private final LicenseRepository licenseRepository;
-    
+
     @Override
     public Page<LicenseDto> getAllLicenses(Pageable pageable) {
         log.debug("Получение всех лицензий с пагинацией: {}", pageable);
@@ -36,7 +37,7 @@ public class LicenseServiceImpl implements LicenseService {
         return licenseRepository.findAll(pageable)
                 .map(this::toDto);
     }
-    
+
     @Override
     public LicenseDto getLicenseById(Long id) {
         log.debug("Поиск лицензии с ID: {}", id);
@@ -47,22 +48,22 @@ public class LicenseServiceImpl implements LicenseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Лицензия не найдена с ID: " + id));
         return toDto(license);
     }
-    
+
     @Override
     @Transactional
     public LicenseDto createLicense(CreateLicenseRequest request) {
         log.info("Создание новой лицензии: {}", request.getName());
-        
+
         License license = toEntity(request);
         if (license == null) {
             throw new IllegalArgumentException("License не может быть null");
         }
         License savedLicense = licenseRepository.save(license);
-        
+
         log.info("Лицензия успешно создана с ID: {}", savedLicense.getId());
         return toDto(savedLicense);
     }
-    
+
     @Override
     @Transactional
     public LicenseDto updateLicense(Long id, CreateLicenseRequest request) {
@@ -70,18 +71,18 @@ public class LicenseServiceImpl implements LicenseService {
         if (id == null) {
             throw new IllegalArgumentException("ID не может быть null");
         }
-        
+
         License license = licenseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Лицензия не найдена с ID: " + id));
-        
+
         updateEntityFromDto(license, request);
         @SuppressWarnings("null")
         License updatedLicense = licenseRepository.save(license);
-        
+
         log.info("Лицензия успешно обновлена: {}", id);
         return toDto(updatedLicense);
     }
-    
+
     @Override
     @Transactional
     public void deleteLicense(Long id) {
@@ -89,15 +90,15 @@ public class LicenseServiceImpl implements LicenseService {
         if (id == null) {
             throw new IllegalArgumentException("ID не может быть null");
         }
-        
+
         if (!licenseRepository.existsById(id)) {
             throw new ResourceNotFoundException("Лицензия не найдена с ID: " + id);
         }
-        
+
         licenseRepository.deleteById(id);
         log.info("Лицензия успешно удалена: {}", id);
     }
-    
+
     @Override
     public LicenseDto findByName(String name) {
         log.debug("Поиск лицензии по имени: {}", name);
@@ -105,7 +106,7 @@ public class LicenseServiceImpl implements LicenseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Лицензия не найдена с именем: " + name));
         return toDto(license);
     }
-    
+
     @Override
     public List<LicenseDto> getLicensesByType(License.LicenseType type) {
         log.debug("Получение лицензий по типу: {}", type);
@@ -114,7 +115,7 @@ public class LicenseServiceImpl implements LicenseService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-    
+
     @Override
     public List<LicenseDto> getOsiApprovedLicenses() {
         log.debug("Получение OSI-одобренных лицензий");
@@ -123,23 +124,22 @@ public class LicenseServiceImpl implements LicenseService {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-    
+
     // Вспомогательные методы для маппинга
-    
+
     private LicenseDto toDto(License license) {
         return new LicenseDto(
-            license.getId(),
-            license.getName(),
-            license.getLicenseType(),
-            license.getDescription(),
-            license.getIsOsiApproved(),
-            license.getCommercialUseAllowed(),
-            license.getUrl(),
-            license.getCreatedAt(),
-            license.getUpdatedAt()
-        );
+                license.getId(),
+                license.getName(),
+                license.getLicenseType(),
+                license.getDescription(),
+                license.getIsOsiApproved(),
+                license.getCommercialUseAllowed(),
+                license.getUrl(),
+                license.getCreatedAt(),
+                license.getUpdatedAt());
     }
-    
+
     private License toEntity(CreateLicenseRequest request) {
         License license = new License();
         license.setName(request.getName());
@@ -150,7 +150,7 @@ public class LicenseServiceImpl implements LicenseService {
         license.setUrl(request.getUrl());
         return license;
     }
-    
+
     private void updateEntityFromDto(License license, CreateLicenseRequest request) {
         if (request.getName() != null) {
             license.setName(request.getName());
@@ -170,5 +170,30 @@ public class LicenseServiceImpl implements LicenseService {
         if (request.getUrl() != null) {
             license.setUrl(request.getUrl());
         }
+    }
+
+    @Override
+    public String normalize(String licenseName) {
+        if (licenseName == null || licenseName.isBlank()) {
+            return "Unknown";
+        }
+
+        String normalized = licenseName.trim();
+
+        // Common variations map
+        if (normalized.equalsIgnoreCase("MIT License") || normalized.equalsIgnoreCase("The MIT License")) {
+            return "MIT";
+        }
+        if (normalized.equalsIgnoreCase("Apache License 2.0") || normalized.equalsIgnoreCase("Apache 2.0")) {
+            return "Apache-2.0";
+        }
+        if (normalized.equalsIgnoreCase("GNU General Public License v3.0") || normalized.equalsIgnoreCase("GPLv3")) {
+            return "GPL-3.0";
+        }
+        if (normalized.equalsIgnoreCase("BSD 3-Clause \"New\" or \"Revised\" License")) {
+            return "BSD-3-Clause";
+        }
+
+        return normalized;
     }
 }

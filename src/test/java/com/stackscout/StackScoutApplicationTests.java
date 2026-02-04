@@ -1,3 +1,4 @@
+// File: StackScoutApplicationTests.java
 package com.stackscout;
 
 import org.junit.jupiter.api.Test;

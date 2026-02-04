@@ -1,3 +1,4 @@
+// File: LicenseRepository.java
 package com.stackscout.repository;
 
 import com.stackscout.model.License;

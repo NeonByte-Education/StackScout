@@ -1,3 +1,4 @@
+// File: LibraryController.java
 package com.stackscout.controller;
 
 import com.stackscout.dto.CreateLibraryRequest;

@@ -1,3 +1,4 @@
+// File: HealthCheckController.java
 package com.stackscout.controller;
 
 import org.springframework.http.ResponseEntity;

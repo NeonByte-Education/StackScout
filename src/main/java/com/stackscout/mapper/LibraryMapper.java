@@ -1,3 +1,4 @@
+// File: LibraryMapper.java
 package com.stackscout.mapper;
 
 import com.stackscout.dto.CreateLibraryRequest;
