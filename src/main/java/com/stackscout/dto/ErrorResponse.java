@@ -1,3 +1,4 @@
+// File: ErrorResponse.java
 package com.stackscout.dto;
 
 import lombok.AllArgsConstructor;

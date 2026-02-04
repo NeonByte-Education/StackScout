@@ -1,3 +1,4 @@
+// File: SecurityConfig.java
 package com.stackscout.config;
 
 import org.springframework.context.annotation.Bean;

@@ -1,3 +1,4 @@
+// File: LicenseController.java
 package com.stackscout.controller;
 
 import com.stackscout.dto.CreateLicenseRequest;

@@ -1,3 +1,4 @@
+// File: CreateScanJobRequest.java
 package com.stackscout.dto;
 
 import jakarta.validation.constraints.NotBlank;

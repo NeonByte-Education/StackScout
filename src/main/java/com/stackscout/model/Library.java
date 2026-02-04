@@ -1,3 +1,4 @@
+// File: Library.java
 package com.stackscout.model;
 
 import jakarta.persistence.*;

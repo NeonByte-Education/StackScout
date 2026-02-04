@@ -1,3 +1,4 @@
+// File: StackScoutApplication.java
 package com.stackscout;
 
 import org.springframework.boot.SpringApplication;

@@ -1,3 +1,4 @@
+// File: ScanRequest.java
 package com.stackscout.dto;
 
 import lombok.AllArgsConstructor;

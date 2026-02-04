@@ -1,3 +1,4 @@
+// File: LicenseDto.java
 package com.stackscout.dto;
 
 import com.stackscout.model.License;

@@ -1,3 +1,4 @@
+// File: LibraryServiceImpl.java
 package com.stackscout.service.impl;
 
 import com.stackscout.dto.CreateLibraryRequest;
