@@ -31,6 +31,7 @@
 **StackScout** — это интеллектуальный микросервис на **Java Spring Boot** для **управления программными активами (Software Asset Management)**, который автоматизирует сбор, анализ и мониторинг open-source библиотек из PyPI и Docker Hub.
 
 Наша платформа предоставляет:
+
 - Оценку "здоровья" библиотек в реальном времени
 - Валидацию соответствия лицензиям
 - Автоматический сбор метаданных
@@ -61,25 +62,27 @@
 
 ### Основные компоненты
 
-| Компонент | Технология | Назначение |
-|-----------|-----------|-----------|
-| **API слой** | Spring Boot + Spring Web | RESTful endpoints с JWT авторизацией |
-| **Слой данных** | PostgreSQL + Spring Data JPA | Постоянное хранилище и ORM |
-| **Слой кэширования** | Redis + Spring Cache | Управление сессиями и ограничение запросов |
-| **Система очередей** | Spring AMQP + RabbitMQ | Асинхронный парсинг и планирование |
-| **Мониторинг** | Prometheus + Grafana | Сбор метрик и визуализация |
+| Компонент            | Технология                   | Назначение                                 |
+| -------------------- | ---------------------------- | ------------------------------------------ |
+| **API слой**         | Spring Boot + Spring Web     | RESTful endpoints с JWT авторизацией       |
+| **Слой данных**      | PostgreSQL + Spring Data JPA | Постоянное хранилище и ORM                 |
+| **Слой кэширования** | Redis + Spring Cache         | Управление сессиями и ограничение запросов |
+| **Система очередей** | Spring AMQP + RabbitMQ       | Асинхронный парсинг и планирование         |
+| **Мониторинг**       | Prometheus + Grafana         | Сбор метрик и визуализация                 |
 
 ---
 
 ## Возможности
 
 ### Сборщик данных (Data Collector)
+
 - Автоматический сбор метаданных через официальные API (PyPI JSON API, Docker Registry API)
 - Планируемый парсинг через Cron jobs (настраиваемые интервалы)
 - Параллельная обработка с использованием очередей задач
 - Нормализация и дедупликация данных
 
 ### Модуль лицензионного соответствия
+
 - Нормализация названий лицензий (`"MIT License"` → `"MIT"`)
 - Классификация рисков:
   - **Разрешающие**: MIT, Apache-2.0, BSD
@@ -88,19 +91,23 @@
 - Матрица совместимости для проектов с множественными лицензиями
 
 ### Алгоритм оценки здоровья
+
 Интеллектуальная система оценки на основе:
+
 - **Актуальность**: Время с момента последнего релиза (0-40 баллов)
 - **Активность**: Количество релизов за последний год (0-30 баллов)
 - **Репозиторий**: Наличие официального исходного кода (0-20 баллов)
 - **Сообщество**: Количество контрибьюторов и активность (0-10 баллов)
 
 **Интерпретация оценок**:
+
 - **80-100**: Отлично (Готово к production)
 - **60-79**: Хорошо (Рекомендуется проверка)
 - **40-59**: Удовлетворительно (Использовать с осторожностью)
 - **0-39**: Плохо (Избегать или заменить)
 
 ### Защищенный API
+
 - JWT-авторизация (Spring Security)
 - Управление доступом на основе ролей (RBAC)
 - Ограничение количества запросов (100 запросов/мин на API ключ)
@@ -108,6 +115,7 @@
 - Спецификация OpenAPI 3.0 (SpringDoc)
 
 ### Наблюдаемость (Observability)
+
 - Пользовательские метрики Prometheus (`http_requests_total`, `library_scan_duration`)
 - Готовые дашборды Grafana
 - Spring Boot Actuator для проверки здоровья (`/actuator/health`, `/actuator/prometheus`)
@@ -127,16 +135,18 @@
 Проект настроен для работы "из коробки" без дополнительных настроек!
 
 1. **Клонируйте репозиторий**
+
    ```bash
    git clone https://github.com/NeonByte-Education/StackScout.git
    cd StackScout
    ```
 
 2. **Запустите приложение**
+
    ```bash
    ./gradlew bootRun
    ```
-   
+
    Приложение автоматически:
    - Использует встроенную H2 базу данных в памяти
    - Запустится на порту 8081
@@ -157,16 +167,19 @@
 Для полноценного окружения с PostgreSQL, Redis и RabbitMQ:
 
 1. **Запустите сервисы через Docker Compose**
+
    ```bash
    docker-compose up -d
    ```
 
 2. **Запустите приложение с production профилем**
+
    ```bash
    ./gradlew bootRun --args='--spring.profiles.active=prod'
    ```
 
    Или без профиля (по умолчанию использует PostgreSQL):
+
    ```bash
    ./gradlew bootRun
    ```
@@ -174,6 +187,7 @@
 ### Режимы работы
 
 #### Dev режим (по умолчанию)
+
 - H2 база данных в памяти
 - Без Redis и RabbitMQ
 - H2 Console включена
@@ -185,6 +199,7 @@
 ```
 
 #### Production режим
+
 - PostgreSQL база данных
 - Redis для кэширования
 - RabbitMQ для очередей
@@ -226,18 +241,21 @@ docker-compose up -d
 ### Примеры endpoints
 
 #### Поиск библиотек
+
 ```http
 GET /api/v1/libraries/search?query=nestjs&source=npm
 Authorization: Bearer <your-jwt-token>
 ```
 
 #### Получение деталей библиотеки
+
 ```http
 GET /api/v1/libraries/:id
 Authorization: Bearer <your-jwt-token>
 ```
 
 Ответ:
+
 ```json
 {
   "id": "uuid-here",
@@ -252,6 +270,7 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 #### Запуск ручного сканирования
+
 ```http
 POST /api/v1/collector/scan
 Authorization: Bearer <admin-token>
@@ -268,36 +287,39 @@ Content-Type: application/json
 ## Roadmap
 
 ### Неделя 1-3: Фундамент
+
 - [x] Настройка проекта с Spring Boot
 - [x] Конфигурация Docker окружения
 - [x] Проектирование схемы БД (Spring Data JPA)
-- [ ] Базовые CRUD операции
+- [x] Базовые CRUD операции
 
 ### Неделя 4-6: Основные функции
-- [ ] Интеграция с PyPI API
-- [ ] Интеграция с Docker Hub API
-- [ ] Модуль нормализации лицензий
-- [ ] Калькулятор оценки здоровья
+
+- [x] Интеграция с PyPI API
+- [x] Интеграция с Docker Hub API
+- [x] Модуль нормализации лицензий
+- [x] Калькулятор оценки здоровья
 
 ### Неделя 7-9: Продвинутые функции
+
 - [ ] Система JWT-авторизации (Spring Security)
 - [ ] Настройка очереди задач RabbitMQ
 - [ ] Планировщик сборщика (@Scheduled)
 - [ ] Слой кэширования Redis (Spring Cache)
 
 ### Неделя 10-12: Качество & DevOps
+
 - [ ] Unit & E2E тестирование (Jest)
 - [ ] CI/CD пайплайн GitHub Actions
 - [ ] Интеграция метрик Prometheus
 - [ ] Дашборды Grafana
 
 ### Неделя 13-15: Готовность к production
+
 - [ ] Ограничение частоты запросов API
 - [ ] Полная документация
 - [ ] Оптимизация производительности
 - [ ] Аудит безопасности
-
-
 
 ---
 
@@ -308,6 +330,7 @@ Content-Type: application/json
 <td>
 
 **Backend**
+
 - Java 17
 - Spring Boot 3.2
 - Spring Security
@@ -317,6 +340,7 @@ Content-Type: application/json
 <td>
 
 **База данных**
+
 - PostgreSQL
 - Flyway Migrations
 - Redis
@@ -326,6 +350,7 @@ Content-Type: application/json
 <td>
 
 **DevOps**
+
 - Docker
 - GitHub Actions
 - Prometheus + Grafana
@@ -348,6 +373,7 @@ Content-Type: application/json
 5. Откройте Pull Request
 
 Пожалуйста, убедитесь, что:
+
 - Все тесты проходят (`npm run test`)
 - Код соответствует правилам ESLint (`npm run lint`)
 - Сообщения коммитов следуют [Conventional Commits](https://www.conventionalcommits.org/)
@@ -366,6 +392,7 @@ Content-Type: application/json
 Проект по Advanced Backend & DevOps
 
 **Контакты:**
+
 - Email: contact@stackscout.dev
 - GitHub: [@S-NOWNUM-B](https://github.com/S-NOWNUM-B)
 - GitHub: [@LINESKL](https://github.com/LINESKL)
