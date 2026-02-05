@@ -10,8 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -60,17 +58,16 @@ class PyPiServiceImplTest {
 				.andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
 		// Act
-		Optional<Library> result = pyPiService.getPackageInfo("requests");
+		Library result = pyPiService.collect("requests");
 
 		// Assert
-		assertTrue(result.isPresent());
-		Library lib = result.get();
-		assertEquals("requests", lib.getName());
-		assertEquals("2.31.0", lib.getVersion());
-		assertEquals("pypi", lib.getSource());
-		assertEquals("Apache 2.0", lib.getLicense());
-		assertEquals("https://github.com/psf/requests", lib.getRepository());
-		assertEquals("2023-05-22T10:00:00", lib.getLastRelease());
+		assertNotNull(result);
+		assertEquals("requests", result.getName());
+		assertEquals("2.31.0", result.getVersion());
+		assertEquals("pypi", result.getSource());
+		assertEquals("Apache 2.0", result.getLicense());
+		assertEquals("https://github.com/psf/requests", result.getRepository());
+		assertEquals("2023-05-22T10:00:00", result.getLastRelease());
 	}
 
 	@Test
@@ -80,9 +77,9 @@ class PyPiServiceImplTest {
 				.andRespond(withResourceNotFound());
 
 		// Act
-		Optional<Library> result = pyPiService.getPackageInfo("unknown-package");
+		Library result = pyPiService.collect("unknown-package");
 
 		// Assert
-		assertTrue(result.isEmpty());
+		assertNull(result);
 	}
 }

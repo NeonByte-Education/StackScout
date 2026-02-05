@@ -25,22 +25,23 @@ class LicenseServiceImplTest {
 
 	@Test
 	void normalize_ShouldReturnUnknown_WhenNullOrBlank() {
-		assertEquals("Unknown", licenseService.normalize(null));
-		assertEquals("Unknown", licenseService.normalize(""));
-		assertEquals("Unknown", licenseService.normalize("   "));
+		assertEquals("Unknown", licenseService.normalizeLicense(null));
+		assertEquals("Unknown", licenseService.normalizeLicense(""));
+		assertEquals("Unknown", licenseService.normalizeLicense("   "));
 	}
 
 	@Test
 	void normalize_ShouldNormalizeCommonLicenses() {
-		assertEquals("MIT", licenseService.normalize("MIT License"));
-		assertEquals("MIT", licenseService.normalize("The MIT License"));
-		assertEquals("Apache-2.0", licenseService.normalize("Apache License 2.0"));
-		assertEquals("Apache-2.0", licenseService.normalize("Apache 2.0"));
-		assertEquals("GPL-3.0", licenseService.normalize("GPLv3"));
+		assertEquals("MIT", licenseService.normalizeLicense("MIT License"));
+		assertEquals("MIT", licenseService.normalizeLicense("The MIT License"));
+		assertEquals("Apache-2.0", licenseService.normalizeLicense("Apache License 2.0"));
+		assertEquals("Apache-2.0", licenseService.normalizeLicense("Apache 2.0"));
+		assertEquals("GPL-3.0", licenseService.normalizeLicense("GPLv3"));
 	}
 
 	@Test
 	void normalize_ShouldReturnOriginal_WhenNoMatch() {
-		assertEquals("Custom License", licenseService.normalize("Custom License"));
+		assertEquals("Custom License", licenseService.normalizeLicense("Custom License"));
 	}
+
 }

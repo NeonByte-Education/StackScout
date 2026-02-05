@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Map;
-
 /**
  * Реализация сервиса для взаимодействия с Docker Hub API.
  * Позволяет получать информацию о репозиториях и образах Docker.
@@ -64,11 +62,11 @@ public class DockerHubServiceImpl implements DockerHubService {
 					.uri("/{namespace}/{repository}", namespace, repository)
 					.retrieve()
 					.body(DockerHubDTOs.DockerHubRepository.class);
-			
+
 			if (repo == null) {
 				return null;
 			}
-			
+
 			return mapToLibrary(repo);
 		} catch (Exception e) {
 			log.warn("Failed to fetch Docker Hub image info for: {}/{}", namespace, repository, e.getMessage());

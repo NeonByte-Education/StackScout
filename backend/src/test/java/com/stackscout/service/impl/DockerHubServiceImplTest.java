@@ -9,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -52,15 +50,14 @@ class DockerHubServiceImplTest {
 				.andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
 		// Act
-		Optional<Library> result = dockerHubService.getImageInfo("nginx");
+		Library result = dockerHubService.collect("nginx");
 
 		// Assert
-		assertTrue(result.isPresent());
-		Library lib = result.get();
-		assertEquals("nginx", lib.getName());
-		assertEquals("docker", lib.getSource());
-		assertEquals("Official build of Nginx.", lib.getDescription());
-		assertEquals("https://hub.docker.com/r/library/nginx", lib.getRepository());
+		assertNotNull(result);
+		assertEquals("nginx", result.getName());
+		assertEquals("dockerhub", result.getSource());
+		assertEquals("Official build of Nginx.", result.getDescription());
+		assertEquals("https://hub.docker.com/r/library/nginx", result.getRepository());
 	}
 
 	@Test
@@ -83,12 +80,11 @@ class DockerHubServiceImplTest {
 				.andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
 		// Act
-		Optional<Library> result = dockerHubService.getImageInfo("mysql/mysql-server");
+		Library result = dockerHubService.collect("mysql/mysql-server");
 
 		// Assert
-		assertTrue(result.isPresent());
-		Library lib = result.get();
-		assertEquals("mysql/mysql-server", lib.getName());
+		assertNotNull(result);
+		assertEquals("mysql/mysql-server", result.getName());
 	}
 
 	@Test
@@ -98,9 +94,9 @@ class DockerHubServiceImplTest {
 				.andRespond(withResourceNotFound());
 
 		// Act
-		Optional<Library> result = dockerHubService.getImageInfo("unknown");
+		Library result = dockerHubService.collect("unknown");
 
 		// Assert
-		assertTrue(result.isEmpty());
+		assertNull(result);
 	}
 }
