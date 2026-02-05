@@ -1,16 +1,19 @@
 server:
+  # Порт, на котором будет запущено приложение
   port: 8081
 
 spring:
   application:
     name: StackScout
 
+  # Настройки подключения к базе данных PostgreSQL
   datasource:
     url: jdbc:postgresql://localhost:5432/stackscout
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
 
+  # Настройки JPA и Hibernate
   jpa:
     hibernate:
       ddl-auto: validate
@@ -20,28 +23,33 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         "[format_sql]": true
 
+  # Настройки Flyway для миграций базы данных
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
 
+  # Настройки Redis для кэширования
   data:
     redis:
       host: localhost
       port: 6379
       password:
 
+  # Настройки RabbitMQ для очередей сообщений
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
 
+  # Настройка типа кэша
   cache:
     type: redis
     redis:
       time-to-live: 3600000
 
+# Настройки логирования
 logging:
   level:
     root: INFO

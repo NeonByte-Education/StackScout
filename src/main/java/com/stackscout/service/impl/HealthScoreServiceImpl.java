@@ -9,9 +9,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Реализация сервиса для расчета рейтинга "здоровья" библиотеки.
+ * Начисляет баллы на основе даты последнего релиза, наличия репозитория,
+ * описания и лицензии.
+ */
 @Service
 public class HealthScoreServiceImpl implements HealthScoreService {
 
+	/**
+	 * Рассчитывает итоговый балл (от 0 до 100).
+	 * 
+	 * @param library Библиотека для оценки.
+	 * @return Оценка от 0 до 100.
+	 */
 	@Override
 	public int calculateScore(Library library) {
 		if (library == null) {

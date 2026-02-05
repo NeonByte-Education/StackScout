@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для взаимодействия с PyPI (Python Package Index) API.
+ * Позволяет получать информацию о Python-пакетах, их версиях и лицензиях.
+ */
 @Service
 @RequiredArgsConstructor
 public class PyPiServiceImpl implements PyPiService {
@@ -20,19 +24,32 @@ public class PyPiServiceImpl implements PyPiService {
 	private final RestClient restClient;
 	private static final Logger logger = LoggerFactory.getLogger(PyPiServiceImpl.class);
 
+	/**
+	 * Конструктор по умолчанию. Настраивает RestClient для PyPI API.
+	 */
 	public PyPiServiceImpl() {
 		this.restClient = RestClient.builder()
 				.baseUrl("https://pypi.org/pypi")
 				.build();
 	}
 
-	// Constructor for testing injectability
+	/**
+	 * Конструктор для внедрения зависимостей в тестах.
+	 * 
+	 * @param restClientBuilder Билдер для RestClient.
+	 */
 	public PyPiServiceImpl(RestClient.Builder restClientBuilder) {
 		this.restClient = restClientBuilder
 				.baseUrl("https://pypi.org/pypi")
 				.build();
 	}
 
+	/**
+	 * Получение информации о пакете из PyPI.
+	 * 
+	 * @param packageName Имя пакета.
+	 * @return Опциональный объект Library с данными о пакете.
+	 */
 	@Override
 	public Optional<Library> getPackageInfo(String packageName) {
 		try {

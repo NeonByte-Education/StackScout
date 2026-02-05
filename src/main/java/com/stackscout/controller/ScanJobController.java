@@ -33,30 +33,45 @@ public class ScanJobController {
 
     private final ScanJobService scanJobService;
 
+    /**
+     * Получить список всех задач сканирования с пагинацией и обратной
+     * хронологической сортировкой по умолчанию.
+     * 
+     * @param page          Номер страницы.
+     * @param size          Размер страницы.
+     * @param sortBy        Поле сортировки.
+     * @param sortDirection Направление.
+     * @return Ответ со списком задач.
+     */
     @Operation(summary = "Получить все задачи", description = "Возвращает список всех задач сканирования с пагинацией")
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllScanJobs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDirection
-    ) {
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
         String direction = sortDirection != null ? sortDirection : "DESC";
         Sort.Direction sortDirEnum = Sort.Direction.fromString(direction);
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirEnum, sortBy));
-        
+
         Page<ScanJobDto> jobsPage = scanJobService.getAllScanJobs(pageable);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("jobs", jobsPage.getContent());
         response.put("totalElements", jobsPage.getTotalElements());
         response.put("currentPage", jobsPage.getNumber());
         response.put("pageSize", jobsPage.getSize());
         response.put("totalPages", jobsPage.getTotalPages());
-        
+
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Получить детальную информацию о конкретной задаче сканирования.
+     * 
+     * @param id Идентификатор задачи.
+     * @return Данные задачи.
+     */
     @Operation(summary = "Получить задачу по ID", description = "Возвращает детали конкретной задачи сканирования")
     @GetMapping("/{id}")
     public ResponseEntity<ScanJobDto> getScanJobById(@PathVariable Long id) {
@@ -64,30 +79,43 @@ public class ScanJobController {
         return ResponseEntity.ok(scanJob);
     }
 
+    /**
+     * Создание новой задачи на сканирование репозитория или пакета.
+     * 
+     * @param request Параметры задачи сканирования.
+     * @return Сообщение об успешном создании и данные созданной задачи.
+     */
     @Operation(summary = "Создать новую задачу", description = "Создает новую задачу сканирования")
     @PostMapping
     public ResponseEntity<Map<String, Object>> createScanJob(@Valid @RequestBody CreateScanJobRequest request) {
         ScanJobDto createdJob = scanJobService.createScanJob(request);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Задача сканирования успешно создана");
         response.put("job", createdJob);
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Частичное обновление статуса задачи сканирования.
+     * 
+     * @param id     Идентификатор задачи.
+     * @param status Новый статус (например, COMPLETED, FAILED).
+     * @return Обновленные данные задачи.
+     */
     @Operation(summary = "Обновить статус задачи", description = "Обновляет статус задачи сканирования")
     @PatchMapping("/{id}/status")
     public ResponseEntity<Map<String, Object>> updateScanJobStatus(
             @PathVariable Long id,
             @RequestParam ScanJob.ScanStatus status) {
-        
+
         ScanJobDto updatedJob = scanJobService.updateScanJobStatus(id, status);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Статус задачи успешно обновлен");
         response.put("job", updatedJob);
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -95,11 +123,11 @@ public class ScanJobController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteScanJob(@PathVariable Long id) {
         scanJobService.deleteScanJob(id);
-        
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "Задача сканирования успешно удалена");
         response.put("id", id.toString());
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -109,16 +137,16 @@ public class ScanJobController {
             @PathVariable ScanJob.ScanStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        
+
         Pageable pageable = PageRequest.of(page, size);
         Page<ScanJobDto> jobsPage = scanJobService.getScanJobsByStatus(status, pageable);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("jobs", jobsPage.getContent());
         response.put("totalElements", jobsPage.getTotalElements());
         response.put("currentPage", jobsPage.getNumber());
         response.put("totalPages", jobsPage.getTotalPages());
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -128,16 +156,16 @@ public class ScanJobController {
             @PathVariable String source,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        
+
         Pageable pageable = PageRequest.of(page, size);
         Page<ScanJobDto> jobsPage = scanJobService.getScanJobsBySource(source, pageable);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("jobs", jobsPage.getContent());
         response.put("totalElements", jobsPage.getTotalElements());
         response.put("currentPage", jobsPage.getNumber());
         response.put("totalPages", jobsPage.getTotalPages());
-        
+
         return ResponseEntity.ok(response);
     }
 
@@ -146,7 +174,7 @@ public class ScanJobController {
     public ResponseEntity<List<ScanJobDto>> getRecentJobs(
             @RequestParam String source,
             @RequestParam(defaultValue = "5") int limit) {
-        
+
         List<ScanJobDto> recentJobs = scanJobService.getRecentJobsBySource(source, limit);
         return ResponseEntity.ok(recentJobs);
     }

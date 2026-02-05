@@ -12,46 +12,50 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для доступа к данным библиотек (бизнес-модель Library).
+ */
 @Repository
 public interface LibraryRepository extends JpaRepository<Library, Long> {
-    
+
     /**
      * Найти библиотеку по имени
      */
     Optional<Library> findByName(String name);
-    
+
     /**
      * Найти библиотеки по источнику (pypi, npm, dockerhub)
      */
     List<Library> findBySource(String source);
-    
+
     /**
      * Найти библиотеки по источнику с пагинацией
      */
     Page<Library> findBySource(String source, Pageable pageable);
-    
+
     /**
      * Поиск библиотек по имени (частичное совпадение)
      */
     @Query("SELECT l FROM Library l WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :query, '%'))")
     Page<Library> searchByName(@Param("query") String query, Pageable pageable);
-    
+
     /**
      * Поиск библиотек по имени и источнику
      */
     @Query("SELECT l FROM Library l WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :query, '%')) AND l.source = :source")
-    Page<Library> searchByNameAndSource(@Param("query") String query, @Param("source") String source, Pageable pageable);
-    
+    Page<Library> searchByNameAndSource(@Param("query") String query, @Param("source") String source,
+            Pageable pageable);
+
     /**
      * Найти библиотеки с оценкой здоровья выше определенного значения
      */
     List<Library> findByHealthScoreGreaterThanEqual(Integer minScore);
-    
+
     /**
      * Найти библиотеки по лицензии
      */
     List<Library> findByLicense(String license);
-    
+
     /**
      * Проверить существование библиотеки по имени и версии
      */

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Стандартный объект ответа при возникновении ошибки.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

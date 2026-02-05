@@ -11,11 +11,19 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Контроллер для проверки работоспособности сервиса.
+ */
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "*")
 public class HealthCheckController {
 
+    /**
+     * Эндпоинт для проверки здоровья (health check).
+     * 
+     * @return Информация о статусе, версии и окружении.
+     */
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> health = new HashMap<>();
@@ -27,6 +35,11 @@ public class HealthCheckController {
         return ResponseEntity.ok(health);
     }
 
+    /**
+     * Простой эндпоинт для проверки доступности API.
+     * 
+     * @return Сообщение "pong".
+     */
     @GetMapping("/ping")
     public ResponseEntity<Map<String, String>> ping() {
         Map<String, String> response = new HashMap<>();

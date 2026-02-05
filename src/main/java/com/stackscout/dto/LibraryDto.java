@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * DTO для ответа с информацией о библиотеке
+ * Объект передачи данных (DTO) для представления информации о библиотеке в
+ * ответах API.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LibraryDto {
-    
+
     private Long id;
     private String name;
     private String version;

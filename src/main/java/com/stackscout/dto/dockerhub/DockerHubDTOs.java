@@ -4,6 +4,9 @@ package com.stackscout.dto.dockerhub;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 
+/**
+ * Объекты передачи данных для взаимодействия с Docker Hub API.
+ */
 public class DockerHubDTOs {
 
 	public record DockerHubRepository(

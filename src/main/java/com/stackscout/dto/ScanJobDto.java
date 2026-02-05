@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * DTO для ответа с информацией о задаче сканирования
+ * Объект передачи данных (DTO) с информацией о состоянии и параметрах задачи
+ * сканирования.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScanJobDto {
-    
+
     private Long id;
     private String source;
     private ScanJob.ScanStatus status;
@@ -27,7 +28,7 @@ public class ScanJobDto {
     private String errorMessage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
     /**
      * Прогресс выполнения в процентах
      */

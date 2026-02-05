@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Orchestrator service that coordinates collection from various sources,
- * normalizes data, calculates scores, and persists results.
+ * Сервис-оркестратор, координирующий сбор данных из различных источников.
+ * Выполняет нормализацию данных, расчет рейтинга и сохранение результатов в
+ * базу данных.
  */
 @Slf4j
 @Service

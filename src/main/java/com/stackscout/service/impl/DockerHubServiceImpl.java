@@ -12,6 +12,10 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для взаимодействия с Docker Hub API.
+ * Позволяет получать информацию о репозиториях и образах Docker.
+ */
 @Service
 @RequiredArgsConstructor
 public class DockerHubServiceImpl implements DockerHubService {
@@ -19,19 +23,32 @@ public class DockerHubServiceImpl implements DockerHubService {
 	private final RestClient restClient;
 	private static final Logger logger = LoggerFactory.getLogger(DockerHubServiceImpl.class);
 
+	/**
+	 * Конструктор по умолчанию. Настраивает RestClient для Docker Hub API.
+	 */
 	public DockerHubServiceImpl() {
 		this.restClient = RestClient.builder()
 				.baseUrl("https://hub.docker.com/v2/repositories")
 				.build();
 	}
 
-	// Constructor for testing injectability
+	/**
+	 * Конструктор для внедрения зависимостей в тестах.
+	 * 
+	 * @param restClientBuilder Билдер для RestClient.
+	 */
 	public DockerHubServiceImpl(RestClient.Builder restClientBuilder) {
 		this.restClient = restClientBuilder
 				.baseUrl("https://hub.docker.com/v2/repositories")
 				.build();
 	}
 
+	/**
+	 * Получение информации об образе из Docker Hub.
+	 * 
+	 * @param imageName Полное имя образа (с пространством имен или без).
+	 * @return Опциональный объект Library с данными об образе.
+	 */
 	@Override
 	public Optional<Library> getImageInfo(String imageName) {
 		String namespace = "library";

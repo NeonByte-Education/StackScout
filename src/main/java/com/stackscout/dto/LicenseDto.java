@@ -9,13 +9,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * DTO для ответа с информацией о лицензии
+ * Объект передачи данных (DTO) для представления информации о лицензии в
+ * ответах API.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class LicenseDto {
-    
+
     private Long id;
     private String name;
     private License.LicenseType licenseType;

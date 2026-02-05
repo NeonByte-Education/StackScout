@@ -5,15 +5,15 @@ import com.stackscout.model.Library;
 import java.util.Optional;
 
 /**
- * Service for interacting with the Docker Hub V2 API to fetch image metadata.
+ * Сервис для взаимодействия с Docker Hub V2 API для получения метаданных
+ * образов.
  */
 public interface DockerHubService {
 	/**
-	 * Fetches metadata for a given Docker image.
+	 * Получает метаданные для указанного Docker-образа.
 	 * 
-	 * @param imageName The name of the image (e.g., "nginx" or
-	 *                  "mysql/mysql-server").
-	 * @return Optional containing Library entity with metadata.
+	 * @param imageName Имя образа (например, "nginx" или "mysql/mysql-server").
+	 * @return Опциональный объект Library с метаданными.
 	 */
 	Optional<Library> getImageInfo(String imageName);
 }

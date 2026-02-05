@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # Основная база данных приложения
   postgres:
     image: postgres:16-alpine
     container_name: stackscout-postgres
@@ -18,6 +19,7 @@ services:
       timeout: 5s
       retries: 5
 
+  # Кэш и хранилище сессий (опционально)
   redis:
     image: redis:7-alpine
     container_name: stackscout-redis
@@ -31,6 +33,7 @@ services:
       timeout: 5s
       retries: 5
 
+  # Брокер сообщений для асинхронных задач
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: stackscout-rabbitmq

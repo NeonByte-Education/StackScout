@@ -4,15 +4,14 @@ package com.stackscout.service;
 import com.stackscout.model.Library;
 
 /**
- * Service for calculating the health score of a library based on various
- * metrics.
+ * Сервис для расчета рейтинга здоровья библиотеки на основе различных метрик.
  */
 public interface HealthScoreService {
 	/**
-	 * Calculates a health score (0-100) for the given library.
+	 * Рассчитывает рейтинг здоровья (0-100) для указанной библиотеки.
 	 * 
-	 * @param library The library entity to evaluate.
-	 * @return The health score.
+	 * @param library Сущность библиотеки для оценки.
+	 * @return Рейтинг здоровья от 0 до 100.
 	 */
 	int calculateScore(Library library);
 }

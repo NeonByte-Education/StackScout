@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Объекты передачи данных для взаимодействия с PyPI API.
+ */
 public class PyPiDTOs {
 
 	public record PyPiResponse(

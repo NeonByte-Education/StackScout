@@ -11,50 +11,50 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Сервис для работы с задачами сканирования
+ * Сервис для управления жизненным циклом задач сканирования.
  */
 public interface ScanJobService {
-    
+
     /**
      * Получить все задачи с пагинацией
      */
     Page<ScanJobDto> getAllScanJobs(Pageable pageable);
-    
+
     /**
      * Получить задачу по ID
      */
     ScanJobDto getScanJobById(Long id);
-    
+
     /**
      * Создать новую задачу сканирования
      */
     ScanJobDto createScanJob(CreateScanJobRequest request);
-    
+
     /**
      * Обновить статус задачи
      */
     ScanJobDto updateScanJobStatus(Long id, ScanJob.ScanStatus status);
-    
+
     /**
      * Удалить задачу
      */
     void deleteScanJob(Long id);
-    
+
     /**
      * Получить задачи по статусу
      */
     Page<ScanJobDto> getScanJobsByStatus(ScanJob.ScanStatus status, Pageable pageable);
-    
+
     /**
      * Получить задачи по источнику
      */
     Page<ScanJobDto> getScanJobsBySource(String source, Pageable pageable);
-    
+
     /**
      * Получить последние задачи по источнику
      */
     List<ScanJobDto> getRecentJobsBySource(String source, int limit);
-    
+
     /**
      * Получить статистику по статусам
      */

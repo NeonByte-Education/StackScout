@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Объект запроса для запуска процесса сканирования выбранных пакетов.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

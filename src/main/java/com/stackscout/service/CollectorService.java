@@ -5,24 +5,24 @@ import com.stackscout.model.Library;
 import java.util.List;
 
 /**
- * Service for collecting and processing library metadata from various sources.
+ * Сервис для сбора и обработки метаданных библиотек из различных источников.
  */
 public interface CollectorService {
 
 	/**
-	 * Collect metadata for a single package.
+	 * Сбор метаданных для одного пакета.
 	 * 
-	 * @param source The source (e.g., "pypi", "dockerhub")
-	 * @param name   The package name
-	 * @return The processed and saved Library entity
+	 * @param source Источник (например, "pypi", "dockerhub")
+	 * @param name   Имя пакета
+	 * @return Обработанная и сохраненная сущность Library
 	 */
 	Library collect(String source, String name);
 
 	/**
-	 * Collect metadata for multiple packages.
+	 * Массовый сбор метаданных для нескольких пакетов.
 	 * 
-	 * @param source The source
-	 * @param names  List of package names
+	 * @param source Источник
+	 * @param names  Список имен пакетов
 	 */
 	void collectBulk(String source, List<String> names);
 }

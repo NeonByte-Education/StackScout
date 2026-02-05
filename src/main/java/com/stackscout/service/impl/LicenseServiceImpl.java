@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 /**
  * Реализация сервиса для работы с лицензиями
  */
+/**
+ * Реализация сервиса для управления лицензиями.
+ * Обеспечивает CRUD операции, поиск по типу и нормализацию названий лицензий.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,12 @@ public class LicenseServiceImpl implements LicenseService {
 
     private final LicenseRepository licenseRepository;
 
+    /**
+     * Получить все лицензии с пагинацией.
+     * 
+     * @param pageable Объект с параметрами пагинации.
+     * @return Страница лицензий.
+     */
     @Override
     public Page<LicenseDto> getAllLicenses(Pageable pageable) {
         log.debug("Получение всех лицензий с пагинацией: {}", pageable);

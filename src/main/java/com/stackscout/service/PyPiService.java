@@ -5,14 +5,14 @@ import com.stackscout.model.Library;
 import java.util.Optional;
 
 /**
- * Service for interacting with the PyPI JSON API to fetch package metadata.
+ * Сервис для взаимодействия с PyPI JSON API для получения метаданных пакетов.
  */
 public interface PyPiService {
 	/**
-	 * Fetches metadata for a given Python package.
+	 * Получает метаданные для указанного Python-пакета.
 	 * 
-	 * @param packageName The name of the package.
-	 * @return Optional containing Library entity with metadata.
+	 * @param packageName Имя пакета.
+	 * @return Опциональный объект Library с метаданными.
 	 */
 	Optional<Library> getPackageInfo(String packageName);
 }

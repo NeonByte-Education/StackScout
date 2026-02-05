@@ -8,11 +8,12 @@ import com.stackscout.model.Library;
 import org.springframework.stereotype.Component;
 
 /**
- * Маппер для конвертации между Library entity и DTOs
+ * Маппер для преобразования между сущностью Library и объектами передачи данных
+ * (DTO).
  */
 @Component
 public class LibraryMapper {
-    
+
     /**
      * Конвертация Entity в DTO
      */
@@ -20,22 +21,21 @@ public class LibraryMapper {
         if (library == null) {
             return null;
         }
-        
+
         return new LibraryDto(
-            library.getId(),
-            library.getName(),
-            library.getVersion(),
-            library.getSource(),
-            library.getLicense(),
-            library.getHealthScore(),
-            library.getLastRelease(),
-            library.getRepository(),
-            library.getDescription(),
-            library.getCreatedAt(),
-            library.getUpdatedAt()
-        );
+                library.getId(),
+                library.getName(),
+                library.getVersion(),
+                library.getSource(),
+                library.getLicense(),
+                library.getHealthScore(),
+                library.getLastRelease(),
+                library.getRepository(),
+                library.getDescription(),
+                library.getCreatedAt(),
+                library.getUpdatedAt());
     }
-    
+
     /**
      * Конвертация CreateRequest в Entity
      */
@@ -43,7 +43,7 @@ public class LibraryMapper {
         if (request == null) {
             return null;
         }
-        
+
         Library library = new Library();
         library.setName(request.getName());
         library.setVersion(request.getVersion());
@@ -53,10 +53,10 @@ public class LibraryMapper {
         library.setLastRelease(request.getLastRelease());
         library.setRepository(request.getRepository());
         library.setDescription(request.getDescription());
-        
+
         return library;
     }
-    
+
     /**
      * Обновление Entity из UpdateRequest
      */
@@ -64,7 +64,7 @@ public class LibraryMapper {
         if (library == null || request == null) {
             return;
         }
-        
+
         if (request.getName() != null) {
             library.setName(request.getName());
         }
