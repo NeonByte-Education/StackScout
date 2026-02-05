@@ -1,5 +1,7 @@
 package com.stackscout.service;
 
-public class DockerHubService {
-    
+import com.stackscout.model.Library;
+
+public interface DockerHubService {
+    Library collect(String name);
 }

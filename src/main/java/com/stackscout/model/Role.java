@@ -1,5 +1,6 @@
 package com.stackscout.model;
 
-public class Role {
-    
+public enum Role {
+    USER,
+    ADMIN
 }

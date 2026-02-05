@@ -1,5 +1,7 @@
 package com.stackscout.service;
 
-public class PyPiService {
-    
+import com.stackscout.model.Library;
+
+public interface PyPiService {
+    Library collect(String name);
 }

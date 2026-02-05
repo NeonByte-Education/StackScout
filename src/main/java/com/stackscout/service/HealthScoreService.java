@@ -1,5 +1,7 @@
 package com.stackscout.service;
 
-public class HealthScoreService {
-    
+import com.stackscout.model.Library;
+
+public interface HealthScoreService {
+    Integer calculateScore(Library library);
 }
