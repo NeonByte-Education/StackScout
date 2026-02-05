@@ -57,5 +57,5 @@ public interface LicenseService {
     /**
      * Нормализовать название лицензии
      */
-    String normalize(String licenseName);
+    String normalizeLicense(String license);
 }

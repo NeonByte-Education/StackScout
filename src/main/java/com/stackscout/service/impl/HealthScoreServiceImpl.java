@@ -24,7 +24,7 @@ public class HealthScoreServiceImpl implements HealthScoreService {
 	 * @return Оценка от 0 до 100.
 	 */
 	@Override
-	public int calculateScore(Library library) {
+	public Integer calculateScore(Library library) {
 		if (library == null) {
 			return 0;
 		}
@@ -60,7 +60,7 @@ public class HealthScoreServiceImpl implements HealthScoreService {
 		}
 
 		try {
-			// Ry to parse flexible format, usually ISO from APIs
+			// Try to parse flexible format, usually ISO from APIs
 			LocalDateTime releaseDate = LocalDateTime.parse(lastReleaseDate, DateTimeFormatter.ISO_DATE_TIME);
 			long daysDiff = ChronoUnit.DAYS.between(releaseDate, LocalDateTime.now());
 
@@ -74,7 +74,7 @@ public class HealthScoreServiceImpl implements HealthScoreService {
 				return 5;
 			}
 		} catch (Exception e) {
-			// Parsing failed, return 0 or try other format
+			// Parsing failed, return 0
 			return 0;
 		}
 	}

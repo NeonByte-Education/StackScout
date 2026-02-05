@@ -1,15 +1,15 @@
 CREATE TABLE libraries (
-    id bigserial PRIMARY KEY,
-    name varchar(255) NOT NULL,
-    version varchar(50) NOT NULL,
-    source varchar(50) NOT NULL,
-    license_name varchar(100),
-    health_score integer,
-    last_release varchar(50),
-    repository varchar(500),
-    description text,
-    created_at timestamp NOT NULL,
-    updated_at timestamp
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    version VARCHAR(50) NOT NULL,
+    source VARCHAR(50) NOT NULL,
+    license_name VARCHAR(100),
+    health_score INTEGER,
+    last_release VARCHAR(50),
+    repository VARCHAR(500),
+    description TEXT,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP
 );
 
 CREATE INDEX idx_library_name ON libraries(name);

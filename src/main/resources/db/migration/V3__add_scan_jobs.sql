@@ -1,15 +1,15 @@
 CREATE TABLE scan_jobs (
-    id bigserial PRIMARY KEY,
-    source varchar(50) NOT NULL,
-    status varchar(50) NOT NULL,
-    packages_count integer,
-    processed_count integer,
-    failed_count integer,
-    started_at timestamp,
-    completed_at timestamp,
-    error_message text,
-    created_at timestamp NOT NULL,
-    updated_at timestamp
+    id BIGSERIAL PRIMARY KEY,
+    source VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    packages_count INTEGER,
+    processed_count INTEGER,
+    failed_count INTEGER,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
+    error_message TEXT,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP
 );
 
 CREATE INDEX idx_scan_job_status ON scan_jobs(status);

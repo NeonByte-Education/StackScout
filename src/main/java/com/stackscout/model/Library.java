@@ -3,6 +3,7 @@ package com.stackscout.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
         @Index(name = "idx_library_health_score", columnList = "health_score")
 })
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Library {

@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Реализация сервиса для работы с лицензиями
- */
-/**
  * Реализация сервиса для управления лицензиями.
  * Обеспечивает CRUD операции, поиск по типу и нормализацию названий лицензий.
  */
@@ -135,6 +132,31 @@ public class LicenseServiceImpl implements LicenseService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String normalizeLicense(String licenseName) {
+        if (licenseName == null || licenseName.isBlank()) {
+            return "Unknown";
+        }
+
+        String normalized = licenseName.trim();
+
+        // Common variations map
+        if (normalized.equalsIgnoreCase("MIT License") || normalized.equalsIgnoreCase("The MIT License") || normalized.toUpperCase().contains("MIT")) {
+            return "MIT";
+        }
+        if (normalized.equalsIgnoreCase("Apache License 2.0") || normalized.equalsIgnoreCase("Apache 2.0") || normalized.toUpperCase().contains("APACHE")) {
+            return "Apache-2.0";
+        }
+        if (normalized.equalsIgnoreCase("GNU General Public License v3.0") || normalized.equalsIgnoreCase("GPLv3") || normalized.toUpperCase().contains("GPL")) {
+            return "GPL-3.0";
+        }
+        if (normalized.equalsIgnoreCase("BSD 3-Clause \"New\" or \"Revised\" License") || normalized.toUpperCase().contains("BSD")) {
+            return "BSD-3-Clause";
+        }
+
+        return normalized;
+    }
+
     // Вспомогательные методы для маппинга
 
     private LicenseDto toDto(License license) {
@@ -180,30 +202,5 @@ public class LicenseServiceImpl implements LicenseService {
         if (request.getUrl() != null) {
             license.setUrl(request.getUrl());
         }
-    }
-
-    @Override
-    public String normalize(String licenseName) {
-        if (licenseName == null || licenseName.isBlank()) {
-            return "Unknown";
-        }
-
-        String normalized = licenseName.trim();
-
-        // Common variations map
-        if (normalized.equalsIgnoreCase("MIT License") || normalized.equalsIgnoreCase("The MIT License")) {
-            return "MIT";
-        }
-        if (normalized.equalsIgnoreCase("Apache License 2.0") || normalized.equalsIgnoreCase("Apache 2.0")) {
-            return "Apache-2.0";
-        }
-        if (normalized.equalsIgnoreCase("GNU General Public License v3.0") || normalized.equalsIgnoreCase("GPLv3")) {
-            return "GPL-3.0";
-        }
-        if (normalized.equalsIgnoreCase("BSD 3-Clause \"New\" or \"Revised\" License")) {
-            return "BSD-3-Clause";
-        }
-
-        return normalized;
     }
 }

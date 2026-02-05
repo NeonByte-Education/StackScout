@@ -11,6 +11,8 @@ import com.stackscout.repository.LibraryRepository;
 import com.stackscout.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
     
     @Override
+    @Cacheable(value = "libraries", key = "#id")
     public LibraryDto getLibraryById(Long id) {
         log.debug("Поиск библиотеки с ID: {}", id);
         if (id == null) {
@@ -54,6 +57,7 @@ public class LibraryServiceImpl implements LibraryService {
     
     @Override
     @Transactional
+    @CacheEvict(value = {"libraries", "libraries_search"}, allEntries = true)
     public LibraryDto createLibrary(CreateLibraryRequest request) {
         log.info("Создание новой библиотеки: {}", request.getName());
         
@@ -69,6 +73,7 @@ public class LibraryServiceImpl implements LibraryService {
     
     @Override
     @Transactional
+    @CacheEvict(value = {"libraries", "libraries_search"}, allEntries = true)
     public LibraryDto updateLibrary(Long id, UpdateLibraryRequest request) {
         log.info("Обновление библиотеки с ID: {}", id);
         if (id == null) {
@@ -88,6 +93,7 @@ public class LibraryServiceImpl implements LibraryService {
     
     @Override
     @Transactional
+    @CacheEvict(value = {"libraries", "libraries_search"}, allEntries = true)
     public void deleteLibrary(Long id) {
         log.info("Удаление библиотеки с ID: {}", id);
         if (id == null) {
@@ -103,6 +109,7 @@ public class LibraryServiceImpl implements LibraryService {
     }
     
     @Override
+    @Cacheable(value = "libraries_search", key = "{#query, #pageable}")
     public Page<LibraryDto> searchLibraries(String query, Pageable pageable) {
         log.debug("Поиск библиотек по запросу: {}", query);
         return libraryRepository.searchByName(query, pageable)

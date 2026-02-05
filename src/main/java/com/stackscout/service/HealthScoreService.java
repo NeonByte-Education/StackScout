@@ -13,5 +13,5 @@ public interface HealthScoreService {
 	 * @param library Сущность библиотеки для оценки.
 	 * @return Рейтинг здоровья от 0 до 100.
 	 */
-	int calculateScore(Library library);
+	Integer calculateScore(Library library);
 }

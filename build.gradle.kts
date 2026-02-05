@@ -40,13 +40,19 @@ dependencies {
     
     // Database
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("com.h2database:h2")
+    testImplementation("com.h2database:h2")
     
     // SpringDoc OpenAPI (Swagger) - тут версия нужна, так как это сторонний starter
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
     
     // Micrometer for Prometheus
     implementation("io.micrometer:micrometer-registry-prometheus")
+
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
     
     // Lombok (версия управляется Spring Boot)
     compileOnly("org.projectlombok:lombok")

@@ -5,24 +5,22 @@ import com.stackscout.dto.pypi.PyPiDTOs;
 import com.stackscout.model.Library;
 import com.stackscout.service.PyPiService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Реализация сервиса для взаимодействия с PyPI (Python Package Index) API.
  * Позволяет получать информацию о Python-пакетах, их версиях и лицензиях.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PyPiServiceImpl implements PyPiService {
 
 	private final RestClient restClient;
-	private static final Logger logger = LoggerFactory.getLogger(PyPiServiceImpl.class);
 
 	/**
 	 * Конструктор по умолчанию. Настраивает RestClient для PyPI API.
@@ -48,19 +46,24 @@ public class PyPiServiceImpl implements PyPiService {
 	 * Получение информации о пакете из PyPI.
 	 * 
 	 * @param packageName Имя пакета.
-	 * @return Опциональный объект Library с данными о пакете.
+	 * @return Объект Library с данными о пакете или null в случае ошибки.
 	 */
 	@Override
-	public Optional<Library> getPackageInfo(String packageName) {
+	public Library collect(String packageName) {
 		try {
-			return Optional.ofNullable(restClient.get()
+			PyPiDTOs.PyPiResponse response = restClient.get()
 					.uri("/{package}/json", packageName)
 					.retrieve()
-					.body(PyPiDTOs.PyPiResponse.class))
-					.map(this::mapToLibrary);
+					.body(PyPiDTOs.PyPiResponse.class);
+			
+			if (response == null) {
+				return null;
+			}
+			
+			return mapToLibrary(response);
 		} catch (Exception e) {
-			logger.warn("Failed to fetch PyPI package info for: {}", packageName, e);
-			return Optional.empty();
+			log.warn("Failed to fetch PyPI package info for: {}", packageName, e.getMessage());
+			return null;
 		}
 	}
 
