@@ -3,96 +3,74 @@ package com.stackscout.service.impl;
 
 import com.stackscout.model.Library;
 import com.stackscout.repository.LibraryRepository;
+import com.stackscout.messaging.CollectorProducer;
 import com.stackscout.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Сервис-оркестратор, координирующий сбор данных из различных источников.
- * Выполняет нормализацию данных, расчет рейтинга и сохранение результатов в
- * базу данных.
+ * Выполняет нормализацию данных, расчет рейтинга и сохранение результатов в базу данных.
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CollectorServiceImpl implements CollectorService {
 
-	private final PyPiService pyPiService;
-	private final DockerHubService dockerHubService;
+	private final PyPiService pypiCollector;
+	private final DockerHubService dockerHubCollector;
 	private final LicenseService licenseService;
 	private final HealthScoreService healthScoreService;
 	private final LibraryRepository libraryRepository;
+	private final CollectorProducer collectorProducer;
 
 	@Override
 	@Transactional
 	public Library collect(String source, String name) {
-		log.info("Collecting metadata for {} from {}", name, source);
+		log.info("Collecting metadata for package {} from {}", name, source);
 
-		Optional<Library> optionalLibrary = switch (source.toLowerCase()) {
-			case "pypi" -> pyPiService.getPackageInfo(name);
-			case "docker", "dockerhub" -> dockerHubService.getImageInfo(name);
-			default -> {
-				log.warn("Unsupported source: {}", source);
-				yield Optional.empty();
-			}
-		};
+		Library library;
+		if ("pypi".equalsIgnoreCase(source)) {
+			library = pypiCollector.collect(name);
+		} else if ("dockerhub".equalsIgnoreCase(source) || "docker".equalsIgnoreCase(source)) {
+			library = dockerHubCollector.collect(name);
+		} else {
+			throw new IllegalArgumentException("Unsupported source: " + source);
+		}
 
-		if (optionalLibrary.isEmpty()) {
-			log.warn("Could not find metadata for {} in {}", name, source);
+		if (library == null) {
+			log.warn("No metadata found for {} from {}", name, source);
 			return null;
 		}
 
-		Library library = optionalLibrary.get();
-
-		// 1. Normalize License
+		// Normalize license
 		if (library.getLicense() != null) {
-			String normalizedLicense = licenseService.normalize(library.getLicense());
+			String normalizedLicense = licenseService.normalizeLicense(library.getLicense());
 			library.setLicense(normalizedLicense);
 		}
 
-		// 2. Calculate Health Score
-		int score = healthScoreService.calculateScore(library);
-		library.setHealthScore(score);
+		// Calculate health score
+		Integer healthScore = healthScoreService.calculateScore(library);
+		library.setHealthScore(healthScore);
 
-		// 3. Persist (Update if exists, or Save new)
-		return saveOrUpdate(library);
+		// Save or update
+		Library existing = libraryRepository.findByName(name).orElse(null);
+		if (existing != null) {
+			library.setId(existing.getId());
+		}
+
+		return libraryRepository.save(library);
 	}
 
 	@Override
-	@Transactional
 	public void collectBulk(String source, List<String> names) {
-		log.info("Starting bulk collection for {} packages from {}", names.size(), source);
+		log.info("Queuing bulk scan for {} packages from {}", names.size(), source);
 		for (String name : names) {
-			try {
-				collect(source, name);
-			} catch (Exception e) {
-				log.error("Failed to collect {} from {}: {}", name, source, e.getMessage());
-			}
-		}
-	}
-
-	private Library saveOrUpdate(Library library) {
-		Optional<Library> existing = libraryRepository.findByName(library.getName());
-
-		if (existing.isPresent()) {
-			Library entity = existing.get();
-			entity.setVersion(library.getVersion());
-			entity.setSource(library.getSource());
-			entity.setLicense(library.getLicense());
-			entity.setHealthScore(library.getHealthScore());
-			entity.setLastRelease(library.getLastRelease());
-			entity.setRepository(library.getRepository());
-			entity.setDescription(library.getDescription());
-			entity.setUpdatedAt(LocalDateTime.now());
-			return libraryRepository.save(entity);
-		} else {
-			return libraryRepository.save(library);
+			collectorProducer.sendScanRequest(source, name);
 		}
 	}
 }

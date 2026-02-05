@@ -5,23 +5,22 @@ import com.stackscout.dto.dockerhub.DockerHubDTOs;
 import com.stackscout.model.Library;
 import com.stackscout.service.DockerHubService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * Реализация сервиса для взаимодействия с Docker Hub API.
  * Позволяет получать информацию о репозиториях и образах Docker.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DockerHubServiceImpl implements DockerHubService {
 
 	private final RestClient restClient;
-	private static final Logger logger = LoggerFactory.getLogger(DockerHubServiceImpl.class);
 
 	/**
 	 * Конструктор по умолчанию. Настраивает RestClient для Docker Hub API.
@@ -47,10 +46,10 @@ public class DockerHubServiceImpl implements DockerHubService {
 	 * Получение информации об образе из Docker Hub.
 	 * 
 	 * @param imageName Полное имя образа (с пространством имен или без).
-	 * @return Опциональный объект Library с данными об образе.
+	 * @return Объект Library с данными об образе или null в случае ошибки.
 	 */
 	@Override
-	public Optional<Library> getImageInfo(String imageName) {
+	public Library collect(String imageName) {
 		String namespace = "library";
 		String repository = imageName;
 
@@ -61,14 +60,19 @@ public class DockerHubServiceImpl implements DockerHubService {
 		}
 
 		try {
-			return Optional.ofNullable(restClient.get()
+			DockerHubDTOs.DockerHubRepository repo = restClient.get()
 					.uri("/{namespace}/{repository}", namespace, repository)
 					.retrieve()
-					.body(DockerHubDTOs.DockerHubRepository.class))
-					.map(this::mapToLibrary);
+					.body(DockerHubDTOs.DockerHubRepository.class);
+			
+			if (repo == null) {
+				return null;
+			}
+			
+			return mapToLibrary(repo);
 		} catch (Exception e) {
-			logger.warn("Failed to fetch Docker Hub image info for: {}/{}", namespace, repository, e);
-			return Optional.empty();
+			log.warn("Failed to fetch Docker Hub image info for: {}/{}", namespace, repository, e.getMessage());
+			return null;
 		}
 	}
 
@@ -76,7 +80,7 @@ public class DockerHubServiceImpl implements DockerHubService {
 		Library lib = new Library();
 		lib.setName(repo.namespace().equals("library") ? repo.name() : repo.namespace() + "/" + repo.name());
 		lib.setVersion("latest"); // Docker Hub API doesn't give a single version, defaulting to latest logic
-		lib.setSource("docker");
+		lib.setSource("dockerhub");
 		lib.setLicense(""); // Docker Hub API doesn't consistently provide license in this endpoint
 		lib.setHealthScore(0);
 		lib.setDescription(repo.description());
