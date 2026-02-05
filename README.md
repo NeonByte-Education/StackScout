@@ -6,7 +6,7 @@
 
 [![Coverage](https://img.shields.io/codecov/c/github/yourusername/stackscout)](https://codecov.io/gh/yourusername/stackscout)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.1-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.10-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-21-007396?logo=openjdk)](https://openjdk.org/)
 
 [Возможности](#возможности) • [Архитектура](#архитектура) • [Быстрый старт](#быстрый-старт) • [API Документация](#api-документация) • [Roadmap](#roadmap)
@@ -321,6 +321,13 @@ Content-Type: application/json
 - [ ] Оптимизация производительности
 - [ ] Аудит безопасности
 
+### Неделя 16-20: Frontend разработка
+
+- [ ] Инициализация проекта на **Next.js**
+- [ ] Дизайн интерфейса с Tailwind CSS
+- [ ] Интеграция с Backend API
+- [ ] Интерактивные дашборды оценки "здоровья"
+
 ---
 
 ## Технологический стек
@@ -331,30 +338,31 @@ Content-Type: application/json
 
 **Backend**
 
-- Java 17
-- Spring Boot 3.2
+- Java 21
+- Spring Boot 3.5.10
 - Spring Security
 - Spring Data JPA
 
 </td>
 <td>
 
-**База данных**
+**Frontend (План)**
 
-- PostgreSQL
-- Flyway Migrations
-- Redis
-- RabbitMQ
+- Next.js 15
+- React 19
+- Tailwind CSS
+- TypeScript
 
 </td>
 <td>
 
-**DevOps**
+**Infrastructure**
 
+- PostgreSQL
+- Redis
+- RabbitMQ
 - Docker
-- GitHub Actions
 - Prometheus + Grafana
-- Gradle (Kotlin DSL)
 
 </td>
 </tr>
