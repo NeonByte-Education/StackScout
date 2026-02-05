@@ -32,10 +32,8 @@ public class PyPiServiceImpl implements PyPiService {
                     .source("pypi")
                     .description((String) info.get("summary"))
                     .version((String) info.get("version"))
-                    .author((String) info.get("author"))
                     .license((String) info.get("license"))
-                    .homepage((String) info.get("home_page"))
-                    .packageUrl((String) info.get("package_url"))
+                    .repository((String) info.get("home_page"))
                     .build();
         } catch (Exception e) {
             log.error("Error fetching data from PyPI for {}: {}", name, e.getMessage());

@@ -155,4 +155,16 @@ public class LicenseServiceImpl implements LicenseService {
             license.setUrl(request.getUrl());
         }
     }
+
+    @Override
+    public String normalizeLicense(String license) {
+        if (license == null) return "Unknown";
+        String normalized = license.trim().toUpperCase();
+        if (normalized.contains("MIT")) return "MIT";
+        if (normalized.contains("APACHE")) return "Apache-2.0";
+        if (normalized.contains("GPL")) return "GPL";
+        if (normalized.contains("BSD")) return "BSD";
+        return license;
+    }
 }
+

@@ -14,14 +14,14 @@ public class HealthScoreServiceImpl implements HealthScoreService {
         if (library.getDescription() != null && library.getDescription().length() > 20) {
             score += 10;
         }
-        if (library.getAuthor() != null) {
-            score += 10;
-        }
         if (library.getLicense() != null && !library.getLicense().equalsIgnoreCase("unknown")) {
             score += 15;
         }
-        if (library.getHomepage() != null) {
+        if (library.getRepository() != null) {
             score += 15;
+        }
+        if (library.getVersion() != null) {
+            score += 10;
         }
 
         return Math.min(100, score);

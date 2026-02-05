@@ -16,8 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CollectorServiceImpl implements CollectorService {
 
-	private final PyPiCollectorService pypiCollector;
-	private final DockerHubCollectorService dockerHubCollector;
+	private final PyPiService pypiCollector;
+	private final DockerHubService dockerHubCollector;
 	private final LicenseService licenseService;
 	private final HealthScoreService healthScoreService;
 	private final LibraryRepository libraryRepository;

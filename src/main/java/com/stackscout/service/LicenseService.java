@@ -52,4 +52,10 @@ public interface LicenseService {
      * Получить OSI-одобренные лицензии
      */
     List<LicenseDto> getOsiApprovedLicenses();
+    
+    /**
+     * Нормализация названия лицензии
+     */
+    String normalizeLicense(String license);
 }
+

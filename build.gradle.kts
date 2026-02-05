@@ -40,7 +40,7 @@ dependencies {
     
     // Database
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("com.h2database:h2")
+    testImplementation("com.h2database:h2")
     
     // SpringDoc OpenAPI (Swagger) - тут версия нужна, так как это сторонний starter
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")

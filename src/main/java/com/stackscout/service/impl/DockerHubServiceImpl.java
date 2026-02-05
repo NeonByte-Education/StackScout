@@ -29,10 +29,8 @@ public class DockerHubServiceImpl implements DockerHubService {
                     .name(name)
                     .source("dockerhub")
                     .description((String) response.get("description"))
-                    .version("latest") // Docker Hub works differently, defaulting to latest
-                    .author(name.contains("/") ? name.split("/")[0] : "library")
-                    .homepage("https://hub.docker.com/r/" + name)
-                    .packageUrl(url)
+                    .version("latest")
+                    .repository("https://hub.docker.com/r/" + name)
                     .build();
         } catch (Exception e) {
             log.error("Error fetching data from Docker Hub for {}: {}", name, e.getMessage());
