@@ -58,6 +58,9 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     
+    // Configuration Properties Processor
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    
     // Development Tools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     
