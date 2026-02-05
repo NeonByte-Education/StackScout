@@ -17,6 +17,10 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withResourceNotFound;
 
+/**
+ * Тесты для PyPiServiceImpl.
+ * Проверяют корректность получения информации о пакетах из PyPI API.
+ */
 class PyPiServiceImplTest {
 
 	private PyPiService pyPiService;

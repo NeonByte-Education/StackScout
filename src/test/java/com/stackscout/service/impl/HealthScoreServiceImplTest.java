@@ -10,6 +10,10 @@ import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Тесты для HealthScoreServiceImpl.
+ * Проверяют алгоритм расчета рейтинга здоровья библиотеки.
+ */
 class HealthScoreServiceImplTest {
 
 	private HealthScoreServiceImpl healthScoreService;

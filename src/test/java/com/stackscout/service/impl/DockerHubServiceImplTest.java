@@ -16,6 +16,10 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withResourceNotFound;
 
+/**
+ * Тесты для DockerHubServiceImpl.
+ * Проверяют корректность получения информации об образах из Docker Hub API.
+ */
 class DockerHubServiceImplTest {
 
 	private DockerHubService dockerHubService;

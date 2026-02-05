@@ -10,6 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Тесты для LicenseServiceImpl.
+ * Проверяют логику нормализации названий лицензий.
+ */
 @ExtendWith(MockitoExtension.class)
 class LicenseServiceImplTest {
 

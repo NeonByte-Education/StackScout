@@ -4,6 +4,9 @@ package com.stackscout;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+/**
+ * Тесты для проверки корректности загрузки контекста приложения.
+ */
 @SpringBootTest
 class StackScoutApplicationTests {
 
