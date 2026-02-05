@@ -2,6 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { libraryApi, Library } from "@/lib/api";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Alert,
+  Chip,
+  InputAdornment,
+  Stack,
+  Tooltip,
+} from "@mui/material";
+import { 
+  Search, 
+  FiberManualRecord, 
+  FilterList,
+  TrendingUp,
+  Security,
+} from "@mui/icons-material";
 
 export default function ExplorePage() {
   const [libraries, setLibraries] = useState<Library[]>([]);
@@ -19,9 +41,14 @@ export default function ExplorePage() {
       const { data } = await libraryApi.getAll();
       setLibraries(data.libraries);
       setError(null);
-    } catch (err) {
-      setError("FAILED TO RETRIEVE SYNC DATA FROM CORE.");
-      console.error(err);
+    } catch (err: unknown) {
+      console.error('Ошибка загрузки библиотек:', err);
+      const error = err as Record<string, unknown>;
+      if (error.code === 'ERR_NETWORK' || String(error.message).includes('Network')) {
+        setError("Не удалось подключиться к серверу. Убедитесь, что бэкенд запущен на http://localhost:8081");
+      } else {
+        setError("Не удалось загрузить данные");
+      }
     } finally {
       setLoading(false);
     }
@@ -38,87 +65,383 @@ export default function ExplorePage() {
       const { data } = await libraryApi.search(query);
       setLibraries(data.libraries);
       setError(null);
-    } catch (err) {
-      setError("SEARCH ANOMALY DETECTED.");
+    } catch (err: unknown) {
+      const error = err as Record<string, unknown>;
+      if (error.code === 'ERR_NETWORK' || String(error.message).includes('Network')) {
+        setError("Не удалось подключиться к серверу. Убедитесь, что бэкенд запущен на http://localhost:8081");
+      } else {
+        setError("Ошибка поиска");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="mb-12">
-        <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <span className="w-2 h-8 bg-cyber-orange inline-block"></span>
-          EXPLORE_REPOSITORIES
-        </h2>
-        <form onSubmit={handleSearch} className="flex gap-4 max-w-2xl">
-          <input
-            type="text"
-            placeholder="[ SEARCH_STRING ]"
-            className="flex-1 bg-obsidian border border-cyber-blue/30 px-6 py-3 rounded-sm focus:outline-none focus:border-cyber-blue transition-colors text-cyber-blue font-mono"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="px-8 py-3 bg-cyber-blue/20 text-cyber-blue border border-cyber-blue hover:bg-cyber-blue hover:text-obsidian transition-all"
-          >
-            SCAN
-          </button>
-        </form>
-      </div>
+  const getHealthScoreColor = (score: number) => {
+    if (score >= 80) return 'success.main';
+    if (score >= 60) return 'warning.main';
+    return 'error.main';
+  };
 
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="animate-spin text-cyber-blue text-4xl font-mono">
-            [ UPDATING ]
-          </div>
-        </div>
-      ) : error ? (
-        <div className="glass-panel p-10 cyber-border border-red-500/30 text-red-500 text-center">
-          <div className="text-2xl font-bold mb-2 pt-2">CRITICAL_ERROR</div>
-          <p>{error}</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {libraries.map((lib) => (
-            <div
-              key={lib.id}
-              className="glass-panel p-6 rounded-sm cyber-border border-white/5 group hover:border-cyber-blue/40 transition-all duration-500"
+  const getHealthScoreLabel = (score: number) => {
+    if (score >= 80) return 'Отлично';
+    if (score >= 60) return 'Хорошо';
+    return 'Требует внимания';
+  };
+
+  return (
+    <Box sx={{ minHeight: '100vh', pb: 8 }}>
+      {/* Hero Section */}
+      <Box
+        sx={{
+          backgroundImage: `
+            repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(76, 175, 80, 0.03) 2px, rgba(76, 175, 80, 0.03) 4px),
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(76, 175, 80, 0.03) 2px, rgba(76, 175, 80, 0.03) 4px),
+            linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(55, 100, 80, 0.3) 50%, rgba(26, 26, 26, 0.95) 100%)
+          `,
+          backgroundSize: '40px 40px, 40px 40px, 100% 100%',
+          position: 'relative',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          pt: { xs: 16, md: 20 },
+          pb: { xs: 8, md: 12 },
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(56, 142, 60, 0.08) 0%, transparent 50%)',
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Typography
+              variant="h2"
+              sx={{
+                mb: 2,
+                fontWeight: 800,
+                fontSize: { xs: '2rem', md: '3.5rem' },
+              }}
             >
-              <div className="flex justify-between items-start mb-4">
-                <span className="text-xs font-mono text-cyber-blue/60">
-                  {lib.source} // v{lib.version}
-                </span>
-                <div
-                  className={`w-3 h-3 rounded-full animate-pulse shadow-[0_0_8px] ${lib.healthScore > 80 ? "bg-cyber-green shadow-cyber-green" : "bg-cyber-orange shadow-cyber-orange"}`}
-                ></div>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyber-blue transition-colors">
-                {lib.name}
-              </h3>
-              <p className="text-slate-400 text-sm mb-6 line-clamp-2">
-                {lib.description ||
-                  "No tactical briefing available for this dependency."}
-              </p>
-              <div className="flex justify-between items-center pt-4 border-t border-white/5">
-                <span className="text-sm font-mono text-slate-500">
-                  HEALTH_INDEX: {lib.healthScore}%
-                </span>
-                <span className="text-xs px-2 py-1 bg-white/5 text-slate-300 font-mono tracking-tighter uppercase">
-                  {lib.license || "PROPRIETARY"}
-                </span>
-              </div>
-            </div>
-          ))}
-          {libraries.length === 0 && (
-            <div className="col-span-full py-20 text-center text-slate-500 font-mono">
-              [ NO MATCHES FOUND IN ACTIVE DATABASE ]
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+              Исследовать библиотеки
+            </Typography>
+            <Typography 
+              variant="h6" 
+              color="text.secondary" 
+              sx={{ maxWidth: '700px', mx: 'auto', mb: 5 }}
+            >
+              Находите и анализируйте Open Source библиотеки из различных экосистем
+            </Typography>
+
+            {/* Search Box */}
+            <Box
+              component="form"
+              onSubmit={handleSearch}
+              sx={{ 
+                maxWidth: 800, 
+                mx: 'auto',
+              }}
+            >
+              <Box 
+                sx={{ 
+                  display: "flex", 
+                  gap: 2,
+                  bgcolor: 'background.paper',
+                  p: 1,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                }}
+              >
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  placeholder="Поиск по имени, описанию или источнику..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  InputProps={{
+                    disableUnderline: true,
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Search sx={{ color: 'primary.main' }} />
+                      </InputAdornment>
+                    ),
+                    sx: { px: 2 }
+                  }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{ 
+                    px: 4, 
+                    minWidth: 120,
+                    boxShadow: 'none',
+                  }}
+                >
+                  Найти
+                </Button>
+              </Box>
+
+              {/* Quick Filters */}
+              <Stack 
+                direction="row" 
+                spacing={1} 
+                sx={{ mt: 3 }}
+                justifyContent="center"
+                flexWrap="wrap"
+                useFlexGap
+              >
+                <Chip label="Все" color="primary" onClick={() => setQuery('')} />
+                <Chip label="PyPI" variant="outlined" onClick={() => setQuery('pypi')} />
+                <Chip label="npm" variant="outlined" onClick={() => setQuery('npm')} />
+                <Chip label="Maven" variant="outlined" onClick={() => setQuery('maven')} />
+                <Chip label="Высокий рейтинг" variant="outlined" />
+              </Stack>
+            </Box>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Results Section */}
+      <Container maxWidth="lg" sx={{ mt: 6 }}>
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 10 }}>
+            <CircularProgress size={60} />
+          </Box>
+        ) : error ? (
+          <Alert 
+            severity="error" 
+            sx={{ 
+              borderRadius: 2,
+              '& .MuiAlert-message': {
+                width: '100%',
+              }
+            }}
+          >
+            <Typography variant="body1" fontWeight={600} gutterBottom>
+              {error}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Для запуска бэкенда выполните:
+            </Typography>
+            <Box 
+              component="code" 
+              sx={{ 
+                display: 'block',
+                mt: 1,
+                p: 2,
+                bgcolor: 'rgba(0,0,0,0.1)',
+                borderRadius: 1,
+                fontFamily: 'monospace',
+                fontSize: '0.875rem',
+              }}
+            >
+              cd backend && ./gradlew bootRun
+            </Box>
+          </Alert>
+        ) : (
+          <>
+            {/* Results Header */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+              <Typography variant="h6" fontWeight={600}>
+                Найдено результатов: {libraries.length}
+              </Typography>
+              <Button 
+                startIcon={<FilterList />}
+                variant="outlined"
+                sx={{ display: { xs: 'none', sm: 'flex' } }}
+              >
+                Фильтры
+              </Button>
+            </Box>
+
+            {/* Library Cards */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  md: 'repeat(2, 1fr)',
+                  lg: 'repeat(3, 1fr)',
+                },
+                gap: 3,
+              }}
+            >
+              {libraries.map((lib) => (
+                <Card
+                  key={lib.id}
+                  elevation={0}
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      borderColor: 'primary.main',
+                      boxShadow: '0 12px 24px rgba(76, 175, 80, 0.15)',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                    {/* Header */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        mb: 2,
+                      }}
+                    >
+                      <Chip
+                        label={lib.source}
+                        size="small"
+                        sx={{ 
+                          bgcolor: 'primary.main',
+                          color: 'white',
+                          fontWeight: 600,
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          bgcolor: getHealthScoreColor(lib.healthScore) === 'success.main' 
+                            ? 'rgba(76, 175, 80, 0.1)' 
+                            : getHealthScoreColor(lib.healthScore) === 'warning.main'
+                            ? 'rgba(255, 152, 0, 0.1)'
+                            : 'rgba(244, 67, 54, 0.1)',
+                        }}
+                      >
+                        <FiberManualRecord
+                          sx={{
+                            fontSize: 10,
+                            color: getHealthScoreColor(lib.healthScore),
+                          }}
+                        />
+                        <Typography 
+                          variant="caption" 
+                          fontWeight={600}
+                          sx={{ color: getHealthScoreColor(lib.healthScore) }}
+                        >
+                          {lib.healthScore}%
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Title */}
+                    <Typography variant="h6" gutterBottom fontWeight={700} sx={{ mb: 1 }}>
+                      {lib.name}
+                    </Typography>
+
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        display: 'block',
+                        color: 'text.secondary',
+                        mb: 2,
+                      }}
+                    >
+                      v{lib.version}
+                    </Typography>
+
+                    {/* Description */}
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        mb: 3,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                        lineHeight: 1.6,
+                        minHeight: '72px',
+                      }}
+                    >
+                      {lib.description || "Описание отсутствует"}
+                    </Typography>
+
+                    {/* Metrics */}
+                    <Box sx={{ mb: 2 }}>
+                      <Stack direction="row" spacing={2} sx={{ mb: 1 }}>
+                        <Tooltip title="Рейтинг здоровья">
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                            <TrendingUp sx={{ fontSize: 16, color: 'primary.main' }} />
+                            <Typography variant="caption">
+                              {getHealthScoreLabel(lib.healthScore)}
+                            </Typography>
+                          </Box>
+                        </Tooltip>
+                        {lib.license && (
+                          <Tooltip title="Лицензия">
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                              <Security sx={{ fontSize: 16, color: 'text.secondary' }} />
+                              <Typography variant="caption" color="text.secondary">
+                                {lib.license}
+                              </Typography>
+                            </Box>
+                          </Tooltip>
+                        )}
+                      </Stack>
+                    </Box>
+
+                    {/* Footer */}
+                    <Box
+                      sx={{
+                        mt: "auto",
+                        pt: 2,
+                        borderTop: "1px solid",
+                        borderColor: "divider",
+                      }}
+                    >
+                      <Button 
+                        fullWidth 
+                        variant="outlined" 
+                        size="small"
+                        sx={{ fontWeight: 600 }}
+                      >
+                        Подробнее
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {libraries.length === 0 && (
+                <Box
+                  sx={{
+                    gridColumn: '1 / -1',
+                    textAlign: "center",
+                    py: 10,
+                  }}
+                >
+                  <Search sx={{ fontSize: 64, color: 'text.disabled', mb: 2 }} />
+                  <Typography variant="h6" color="text.secondary" gutterBottom>
+                    Библиотеки не найдены
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Попробуйте изменить запрос или выберите другую экосистему
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+          </>
+        )}
+      </Container>
+    </Box>
   );
 }
