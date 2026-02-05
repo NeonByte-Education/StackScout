@@ -109,6 +109,27 @@
           "response": []
         },
         {
+          "name": "Get Healthy Libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/healthy?minScore=80",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "healthy"],
+              "query": [
+                {
+                  "key": "minScore",
+                  "value": "80"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get Library Stats",
           "request": {
             "method": "GET",
@@ -266,11 +287,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/licenses/by-type/PERMISSIVE",
+              "raw": "http://localhost:8081/api/v1/licenses/type/PERMISSIVE",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8081",
-              "path": ["api", "v1", "licenses", "by-type", "PERMISSIVE"]
+              "path": ["api", "v1", "licenses", "type", "PERMISSIVE"]
             }
           },
           "response": []
@@ -286,21 +307,6 @@
               "host": ["localhost"],
               "port": "8081",
               "path": ["api", "v1", "licenses", "osi-approved"]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get License Stats",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8081/api/v1/licenses/stats",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "stats"]
             }
           },
           "response": []
@@ -427,11 +433,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/scan-jobs/by-status/RUNNING",
+              "raw": "http://localhost:8081/api/v1/scan-jobs/status/RUNNING",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "by-status", "RUNNING"]
+              "path": ["api", "v1", "scan-jobs", "status", "RUNNING"]
             }
           },
           "response": []
@@ -442,26 +448,51 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/scan-jobs/by-source/pypi",
+              "raw": "http://localhost:8081/api/v1/scan-jobs/source/pypi",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "by-source", "pypi"]
+              "path": ["api", "v1", "scan-jobs", "source", "pypi"]
             }
           },
           "response": []
         },
         {
-          "name": "Get Scan Job Stats",
+          "name": "Get Recent Jobs",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/scan-jobs/stats",
+              "raw": "http://localhost:8081/api/v1/scan-jobs/recent?source=pypi&limit=5",
               "protocol": "http",
               "host": ["localhost"],
               "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "stats"]
+              "path": ["api", "v1", "scan-jobs", "recent"],
+              "query": [
+                {
+                  "key": "source",
+                  "value": "pypi"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan Job Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/statistics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "statistics"]
             }
           },
           "response": []
@@ -507,21 +538,6 @@
                   "value": "RUNNING"
                 }
               ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Cancel Scan Job",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8081/api/v1/scan-jobs/1/cancel",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "1", "cancel"]
             }
           },
           "response": []
