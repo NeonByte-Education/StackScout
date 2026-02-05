@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { libraryApi } from "@/lib/api";
+import { apiClient } from "@/lib/api";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
@@ -10,7 +10,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { data } = await (libraryApi as any).apiClient.get(
+        const { data } = await apiClient.get(
           "/libraries/stats",
         );
         setStats(data);

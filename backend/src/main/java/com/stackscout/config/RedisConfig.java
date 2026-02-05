@@ -17,13 +17,10 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
-    @SuppressWarnings("all")
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        @SuppressWarnings("null")
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(1))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)

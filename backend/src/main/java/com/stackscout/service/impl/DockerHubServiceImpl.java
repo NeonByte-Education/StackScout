@@ -62,11 +62,11 @@ public class DockerHubServiceImpl implements DockerHubService {
 					.uri("/{namespace}/{repository}", namespace, repository)
 					.retrieve()
 					.body(DockerHubDTOs.DockerHubRepository.class);
-
+			
 			if (repo == null) {
 				return null;
 			}
-
+			
 			return mapToLibrary(repo);
 		} catch (Exception e) {
 			log.warn("Failed to fetch Docker Hub image info for: {}/{}", namespace, repository, e.getMessage());

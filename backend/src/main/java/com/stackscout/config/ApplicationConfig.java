@@ -26,7 +26,6 @@ public class ApplicationConfig {
     }
 
     @Bean
-    @SuppressWarnings("all")
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());

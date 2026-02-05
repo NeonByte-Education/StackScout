@@ -1,0 +1,591 @@
+{
+  "info": {
+    "name": "StackScout API",
+    "description": "API для анализа Open Source библиотек",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/ping",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "ping"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Libraries",
+      "item": [
+        {
+          "name": "Get All Libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Library by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Libraries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/search?query=react&source=npm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "react"
+                },
+                {
+                  "key": "source",
+                  "value": "npm"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Library Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Library",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"express\",\n  \"version\": \"4.18.2\",\n  \"source\": \"npm\",\n  \"license\": \"MIT\",\n  \"healthScore\": 97,\n  \"lastRelease\": \"2023-10-09\",\n  \"repository\": \"https://github.com/expressjs/express\",\n  \"description\": \"Fast, unopinionated, minimalist web framework\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Library",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version\": \"4.19.0\",\n  \"healthScore\": 98,\n  \"lastRelease\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "4"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Library",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "4"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Licenses",
+      "item": [
+        {
+          "name": "Get All Licenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses?page=0&size=10&sortBy=name&sortDirection=ASC",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "name"
+                },
+                {
+                  "key": "sortDirection",
+                  "value": "ASC"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get License by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Licenses by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/search?name=MIT",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "MIT"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Licenses by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/by-type/PERMISSIVE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "by-type", "PERMISSIVE"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get OSI Approved Licenses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/osi-approved",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "osi-approved"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get License Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create License",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Apache-2.0\",\n  \"licenseType\": \"PERMISSIVE\",\n  \"description\": \"Apache License 2.0\",\n  \"isOsiApproved\": true,\n  \"commercialUseAllowed\": true,\n  \"url\": \"https://opensource.org/licenses/Apache-2.0\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update License",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Apache License 2.0 - Updated\",\n  \"url\": \"https://apache.org/licenses/LICENSE-2.0\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete License",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Scan Jobs",
+      "item": [
+        {
+          "name": "Get All Scan Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs?page=0&size=10&sortBy=createdAt&sortDirection=DESC",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortDirection",
+                  "value": "DESC"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan Job by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan Jobs by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/by-status/RUNNING",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "by-status", "RUNNING"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan Jobs by Source",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/by-source/pypi",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "by-source", "pypi"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Scan Job Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Scan Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"pypi\",\n  \"packagesCount\": 100\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Scan Job Status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1/status?status=RUNNING",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "RUNNING"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Scan Job",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1/cancel",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1", "cancel"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Scan Job",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Collector",
+      "item": [
+        {
+          "name": "Start Scan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"pypi\",\n  \"packages\": [\"requests\", \"django\", \"flask\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/scan",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "scan"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Collector Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
