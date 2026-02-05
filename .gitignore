@@ -38,3 +38,6 @@ logs/
 application-local.yml
 # application-dev.yml теперь часть репозитория
 # application-prod.yml тоже будет в репозитории
+
+# Build artifacts from IDEs
+bin/
