@@ -166,23 +166,55 @@
 
 Для полноценного окружения с PostgreSQL, Redis и RabbitMQ:
 
-1. **Запустите сервисы через Docker Compose**
+#### Шаг 1: Запустите инфраструктуру (в корне проекта)
 
-   ```bash
-   docker-compose up -d
-   ```
+```bash
+cd /Users/stanislavmamaev/Documents/Development/StackScout/StackScout
+docker-compose up -d postgres redis rabbitmq
+```
 
-2. **Запустите приложение с production профилем**
+**Проверьте статус контейнеров:**
 
-   ```bash
-   ./gradlew bootRun --args='--spring.profiles.active=prod'
-   ```
+```bash
+docker-compose ps
+```
 
-   Или без профиля (по умолчанию использует PostgreSQL):
+Все три сервиса должны быть в статусе `Up` и `healthy` (это займет ~15-20 секунд).
 
-   ```bash
-   ./gradlew bootRun
-   ```
+#### Шаг 2: Запустите бэкенд (в папке backend)
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+Приложение запустится на **http://localhost:8081**
+
+**Проверьте работоспособность:**
+
+```bash
+curl http://localhost:8081/actuator/health
+```
+
+#### Шаг 3: Запустите фронтенд (в отдельном терминале)
+
+```bash
+cd frontend
+npm run dev
+```
+
+Приложение откроется на **http://localhost:3000**
+
+#### Остановка всех сервисов
+
+```bash
+# В отдельных терминалах где запущены бэкенд и фронтенд:
+Ctrl+C
+
+# Остановить Docker контейнеры (в корне проекта):
+cd /path/to/StackScout
+docker-compose down
+```
 
 ### Режимы работы
 
