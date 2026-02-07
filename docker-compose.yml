@@ -52,8 +52,22 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: stackscout-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://app:8081/api
+    depends_on:
+      - app
+
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: stackscout-app
     ports:
       - "8081:8081"

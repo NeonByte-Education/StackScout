@@ -78,7 +78,7 @@ public class DockerHubServiceImpl implements DockerHubService {
 		Library lib = new Library();
 		lib.setName(repo.namespace().equals("library") ? repo.name() : repo.namespace() + "/" + repo.name());
 		lib.setVersion("latest"); // Docker Hub API doesn't give a single version, defaulting to latest logic
-		lib.setSource("dockerhub");
+		lib.setSource("docker");
 		lib.setLicense(""); // Docker Hub API doesn't consistently provide license in this endpoint
 		lib.setHealthScore(0);
 		lib.setDescription(repo.description());

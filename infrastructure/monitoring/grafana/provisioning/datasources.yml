@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: default
+data:
+  prometheus.yml: |-
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: true
+        jsonData:
+          timeInterval: 15s
+
+      - name: StackScout Backend
+        type: prometheus
+        access: proxy
+        url: http://app:8081/api/v1/actuator/prometheus
+        editable: true
+        jsonData:
+          timeInterval: 30s
