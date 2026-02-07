@@ -1,0 +1,577 @@
+{
+  "info": {
+    "name": "StackScout API",
+    "description": "Postman collection with complete URLs (no variables in paths)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"\",\n  \"email\": \"\",\n  \"password\": \"\",\n  \"confirmPassword\": \"\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var jsonData = pm.response.json();",
+                  "  if (jsonData && jsonData.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"\",\n  \"password\": \"\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var jsonData = pm.response.json();",
+                  "  if (jsonData && jsonData.token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "health"]
+            }
+          }
+        },
+        {
+          "name": "Ping",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/ping",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "ping"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Libraries",
+      "item": [
+        {
+          "name": "Get All Libraries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Library by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "1"]
+            }
+          }
+        },
+        {
+          "name": "Search Libraries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/search?query=react&source=npm",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "search"],
+              "query": [
+                { "key": "query", "value": "react" },
+                { "key": "source", "value": "npm" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Library",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"demo-lib\",\n  \"source\": \"npm\",\n  \"version\": \"1.0.0\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries"]
+            }
+          }
+        },
+        {
+          "name": "Update Library",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"demo-lib\",\n  \"source\": \"npm\",\n  \"version\": \"1.0.1\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Library",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Healthy Libraries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/healthy?minScore=80",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "healthy"],
+              "query": [
+                { "key": "minScore", "value": "80" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Libraries Stats",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/libraries/stats",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "libraries", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Licenses",
+      "item": [
+        {
+          "name": "Get All Licenses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get License by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create License",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"MIT\",\n  \"type\": \"PERMISSIVE\",\n  \"osiApproved\": true\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses"]
+            }
+          }
+        },
+        {
+          "name": "Update License",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"MIT\",\n  \"type\": \"PERMISSIVE\",\n  \"osiApproved\": true\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete License",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "1"]
+            }
+          }
+        },
+        {
+          "name": "Find License by Name",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/search?name=MIT",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "search"],
+              "query": [
+                { "key": "name", "value": "MIT" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Licenses by Type",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/type/PERMISSIVE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "type", "PERMISSIVE"]
+            }
+          }
+        },
+        {
+          "name": "Get OSI Approved Licenses",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/licenses/osi-approved",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "licenses", "osi-approved"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Scan Jobs",
+      "item": [
+        {
+          "name": "Get All Scan Jobs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Scan Job by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Scan Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"pypi\",\n  \"packageName\": \"demo-package\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs"]
+            }
+          }
+        },
+        {
+          "name": "Update Scan Job Status",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1/status?status=COMPLETED",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1", "status"],
+              "query": [
+                { "key": "status", "value": "COMPLETED" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Scan Job",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Scan Jobs by Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/status/COMPLETED?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "status", "COMPLETED"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Scan Jobs by Source",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/source/pypi?page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "source", "pypi"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Recent Scan Jobs",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/recent?source=pypi&limit=5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "recent"],
+              "query": [
+                { "key": "source", "value": "pypi" },
+                { "key": "limit", "value": "5" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Scan Job Statistics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/scan-jobs/statistics",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "scan-jobs", "statistics"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collector",
+      "item": [
+        {
+          "name": "Start Scan",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"pypi\",\n  \"packages\": [\"demo-package\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/scan",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "scan"]
+            }
+          }
+        },
+        {
+          "name": "Collector Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/api/v1/collector/status",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "v1", "collector", "status"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

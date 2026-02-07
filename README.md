@@ -105,12 +105,3 @@
 ## Лицензия
  
 Этот проект лицензирован под **MIT License** - подробности в файле [LICENSE](LICENSE).
- 
----
- 
-<div align="center">
- 
-**StackScout Team**  
-Сделано с любовью, Java и Next.js
- 
-</div>
