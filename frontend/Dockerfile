@@ -31,7 +31,6 @@ RUN pnpm install --frozen-lockfile --prod
 
 # Копируем собранное приложение из builder
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
 
 # Expose порт
 EXPOSE 3000
