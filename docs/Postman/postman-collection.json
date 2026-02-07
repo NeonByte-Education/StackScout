@@ -37,13 +37,18 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@stackscout.io\",\n  \"password\": \"SecurePassword123!\",\n  \"confirmPassword\": \"SecurePassword123!\"\n}"
+              "raw": "{\n  \"username\": \"SHOWNJHP\",\n  \"email\": \"mamaev.stas@mail.com\",\n  \"password\": \"Aa21133444\",\n  \"confirmPassword\": \"Aa21133444\"\n}"
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/auth/register",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "auth", "register"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "auth",
+                "register"
+              ]
             }
           },
           "response": []
@@ -64,12 +69,31 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/auth/login",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "auth", "login"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "auth",
+                "login"
+              ]
             }
           },
-          "response": []
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
           "name": "Refresh Token",
@@ -87,9 +111,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/auth/refresh",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "auth", "refresh"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "auth",
+                "refresh"
+              ]
             }
           },
           "response": []
@@ -106,9 +135,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/auth/logout",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "auth", "logout"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "auth",
+                "logout"
+              ]
             }
           },
           "response": []
@@ -125,9 +159,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}{{api_version}}/health",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "health"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "health"
+              ]
             }
           },
           "response": []
@@ -139,9 +177,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}{{api_version}}/ping",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "ping"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "ping"
+              ]
             }
           },
           "response": []
@@ -158,10 +200,14 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/libraries?page=0&size=10",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libraries"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -183,10 +229,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/libraries/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libraries",
+                "1"
+              ]
             }
           },
           "response": []
@@ -198,10 +249,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/libraries/search?query=react&source=npm",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "search"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libraries",
+                "search"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -223,10 +279,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/libraries/healthy?minScore=80",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "healthy"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libraries",
+                "healthy"
+              ],
               "query": [
                 {
                   "key": "minScore",
@@ -244,10 +305,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/libraries/stats",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "stats"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "libraries",
+                "stats"
+              ]
             }
           },
           "response": []
@@ -272,9 +338,13 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/libraries",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "libraries"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "libraries"
+              ]
             }
           },
           "response": []
@@ -299,9 +369,14 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/libraries/4",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "libraries", "4"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "libraries",
+                "4"
+              ]
             }
           },
           "response": []
@@ -318,9 +393,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/libraries/4",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "libraries", "4"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "libraries",
+                "4"
+              ]
             }
           },
           "response": []
@@ -337,10 +417,14 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses?page=0&size=10&sortBy=name&sortDirection=ASC",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -370,10 +454,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "1"
+              ]
             }
           },
           "response": []
@@ -385,10 +474,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/search?name=MIT",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "search"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "search"
+              ],
               "query": [
                 {
                   "key": "name",
@@ -406,10 +500,16 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/type/PERMISSIVE",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "type", "PERMISSIVE"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "type",
+                "PERMISSIVE"
+              ]
             }
           },
           "response": []
@@ -421,10 +521,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/osi-approved",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "osi-approved"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "osi-approved"
+              ]
             }
           },
           "response": []
@@ -445,10 +550,14 @@
             },
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses"
+              ]
             }
           },
           "response": []
@@ -469,10 +578,15 @@
             },
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "1"
+              ]
             }
           },
           "response": []
@@ -484,10 +598,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/licenses/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "licenses", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "licenses",
+                "1"
+              ]
             }
           },
           "response": []
@@ -504,10 +623,14 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs?page=0&size=10&sortBy=createdAt&sortDirection=DESC",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -537,10 +660,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "1"
+              ]
             }
           },
           "response": []
@@ -552,10 +680,16 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/status/RUNNING",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "status", "RUNNING"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "status",
+                "RUNNING"
+              ]
             }
           },
           "response": []
@@ -567,10 +701,16 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/source/pypi",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "source", "pypi"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "source",
+                "pypi"
+              ]
             }
           },
           "response": []
@@ -582,10 +722,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/recent?source=pypi&limit=5",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "recent"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "recent"
+              ],
               "query": [
                 {
                   "key": "source",
@@ -607,10 +752,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/statistics",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "statistics"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "statistics"
+              ]
             }
           },
           "response": []
@@ -631,10 +781,14 @@
             },
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs"
+              ]
             }
           },
           "response": []
@@ -646,10 +800,16 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/1/status?status=RUNNING",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "1", "status"],
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "1",
+                "status"
+              ],
               "query": [
                 {
                   "key": "status",
@@ -667,10 +827,15 @@
             "header": [],
             "url": {
               "raw": "http://localhost:8081/api/v1/scan-jobs/1",
-              "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "scan-jobs", "1"]
+              "host": [
+                "localhost"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "scan-jobs",
+                "1"
+              ]
             }
           },
           "response": []
@@ -700,9 +865,14 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/collector/scan",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "collector", "scan"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "collector",
+                "scan"
+              ]
             }
           },
           "response": []
@@ -714,9 +884,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}{{api_version}}/collector/status",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "collector", "status"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "collector",
+                "status"
+              ]
             }
           },
           "response": []
@@ -738,9 +913,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/profile",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "profile"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "profile"
+              ]
             }
           },
           "response": []
@@ -765,9 +945,14 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/profile",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "profile"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "profile"
+              ]
             }
           },
           "response": []
@@ -792,9 +977,14 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/change-password",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "change-password"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "change-password"
+              ]
             }
           },
           "response": []
@@ -811,9 +1001,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/profile",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "profile"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "profile"
+              ]
             }
           },
           "response": []
@@ -830,9 +1025,13 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/users?page=0&size=10",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -859,9 +1058,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/1",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "1"
+              ]
             }
           },
           "response": []
@@ -886,9 +1090,13 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/users",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users"
+              ]
             }
           },
           "response": []
@@ -913,9 +1121,14 @@
             },
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/1",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "1"
+              ]
             }
           },
           "response": []
@@ -932,9 +1145,14 @@
             ],
             "url": {
               "raw": "{{base_url}}{{api_version}}/users/1",
-              "protocol": "http",
-              "host": ["{{base_url}}"],
-              "path": ["{{api_version}}", "users", "1"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "{{api_version}}",
+                "users",
+                "1"
+              ]
             }
           },
           "response": []
