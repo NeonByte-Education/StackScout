@@ -29,9 +29,6 @@ pnpm-lock.yaml
 
 # Gradle
 .gradle
-gradlew
-gradlew.bat
-gradle/
 
 # Environment
 .env

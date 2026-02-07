@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Основная база данных приложения
   postgres:
@@ -40,7 +38,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-      RABBITMQ_ERLANG_COOKIE: "SWQOKJIBSTCHMSYPCNWB"
     ports:
       - "5672:5672"
       - "15672:15672"
