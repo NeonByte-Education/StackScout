@@ -4,7 +4,117 @@
     "description": "API для анализа Open Source библиотек",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "api_version",
+      "value": "/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
   "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@stackscout.io\",\n  \"password\": \"SecurePassword123!\",\n  \"confirmPassword\": \"SecurePassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/auth/register",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/auth/login",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/auth/refresh",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "auth", "refresh"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/auth/logout",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "auth", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Health & Status",
       "item": [
@@ -14,11 +124,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/health",
+              "raw": "{{base_url}}{{api_version}}/health",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "health"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "health"]
             }
           },
           "response": []
@@ -29,11 +138,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/ping",
+              "raw": "{{base_url}}{{api_version}}/ping",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "ping"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "ping"]
             }
           },
           "response": []
@@ -152,6 +260,10 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
               }
             ],
             "body": {
@@ -159,11 +271,10 @@
               "raw": "{\n  \"name\": \"express\",\n  \"version\": \"4.18.2\",\n  \"source\": \"npm\",\n  \"license\": \"MIT\",\n  \"healthScore\": 97,\n  \"lastRelease\": \"2023-10-09\",\n  \"repository\": \"https://github.com/expressjs/express\",\n  \"description\": \"Fast, unopinionated, minimalist web framework\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8081/api/v1/libraries",
+              "raw": "{{base_url}}{{api_version}}/libraries",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "libraries"]
             }
           },
           "response": []
@@ -176,6 +287,10 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
               }
             ],
             "body": {
@@ -183,11 +298,10 @@
               "raw": "{\n  \"version\": \"4.19.0\",\n  \"healthScore\": 98,\n  \"lastRelease\": \"2024-01-15\"\n}"
             },
             "url": {
-              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "raw": "{{base_url}}{{api_version}}/libraries/4",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "4"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "libraries", "4"]
             }
           },
           "response": []
@@ -196,13 +310,17 @@
           "name": "Delete Library",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
-              "raw": "http://localhost:8081/api/v1/libraries/4",
+              "raw": "{{base_url}}{{api_version}}/libraries/4",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "libraries", "4"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "libraries", "4"]
             }
           },
           "response": []
@@ -570,6 +688,10 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
               }
             ],
             "body": {
@@ -577,11 +699,10 @@
               "raw": "{\n  \"source\": \"pypi\",\n  \"packages\": [\"requests\", \"django\", \"flask\"]\n}"
             },
             "url": {
-              "raw": "http://localhost:8081/api/v1/collector/scan",
+              "raw": "{{base_url}}{{api_version}}/collector/scan",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "collector", "scan"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "collector", "scan"]
             }
           },
           "response": []
@@ -592,11 +713,228 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8081/api/v1/collector/status",
+              "raw": "{{base_url}}{{api_version}}/collector/status",
               "protocol": "http",
-              "host": ["localhost"],
-              "port": "8081",
-              "path": ["api", "v1", "collector", "status"]
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "collector", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/profile",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Current User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"newemail@stackscout.io\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/profile",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"currentPassword\",\n  \"newPassword\": \"NewSecurePassword123!\",\n  \"confirmPassword\": \"NewSecurePassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/change-password",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "change-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Current Account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/profile",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin: Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users?page=0&size=10",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin: Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/1",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin: Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"user@stackscout.io\",\n  \"password\": \"SecurePassword123!\",\n  \"roles\": [\"USER\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin: Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"updated@stackscout.io\",\n  \"roles\": [\"USER\", \"VIEWER\"],\n  \"isActive\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/1",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin: Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}{{api_version}}/users/1",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["{{api_version}}", "users", "1"]
             }
           },
           "response": []
